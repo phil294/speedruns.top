@@ -30,11 +30,11 @@ function log_query(string $query, float $start_time): void {
 	fwrite($log_out, sprintf("[%.4f s] %s\n", microtime(true) - $start_time, preg_replace('/\s+/', ' ', trim($query))));
 }
 
-function sql(string $query, array $parameters = []): array {
+function sql(string $query, array $parameters = []): array|null {
 	$start_time = microtime(true);
 	$statement = database()->prepare($query);
 	$statement->execute($parameters);
-	$rows = $statement->fetchAll();
+	$rows = $statement->columnCount() > 0 ? $statement->fetchAll() : null;
 	log_query($query, $start_time);
 	return $rows;
 }
@@ -56,15 +56,6 @@ function transaction(callable $callback): void {
 	}
 }
 
-// TODO: what for
-function write(string $query, array $parameters = []): void {
-	$start_time = microtime(true);
-	$statement = database()->prepare($query);
-	$statement->execute($parameters);
-	log_query($query, $start_time);
-}
-
-// TODO: why
 function write_blob(string $query, string $binary_value, array $other_parameters = []): void {
 	$start_time = microtime(true);
 	$statement = database()->prepare($query);

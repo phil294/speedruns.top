@@ -1,17 +1,16 @@
 <?
 declare(strict_types=1);
 
-$login_link_expiry_seconds = 30 * 60;
+const LOGIN_LINK_EXPIRY_SECONDS = 30 * 60;
 
 if (isset($_GET['token'])) {
-	$login_link = sql_one('select created_at, used_at, token, email from login_link where token = ?', [$_GET['token']]);
-	$link_is_valid = $login_link !== null
-		// TODO: move these two checks into the sql query instead, then change var $login_link to $email instead of *-select
-		&& $login_link['used_at'] === null
-		&& (time() - strtotime($login_link['created_at'] . ' UTC')) <= $login_link_expiry_seconds;
+	$login_link = sql_one(
+		"select email from login_link where token = ? and used_at is null and created_at > datetime('now', ?)",
+		[$_GET['token'], "-" . LOGIN_LINK_EXPIRY_SECONDS . " seconds"],
+	);
 
-	if ($link_is_valid) {
-		write('update login_link set used_at = datetime(\'now\') where token = ?', [$login_link['token']]);
+	if ($login_link !== null) {
+		sql('update login_link set used_at = datetime(\'now\') where token = ?', [$_GET['token']]);
 		$username = find_or_create_user_by_email($login_link['email']);
 		log_in_as($username);
 		header('Location: /');
@@ -31,12 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 		$error_message = 'invalid email??';
 	} else {
-		$existing_user = sql_one('select last_login_link_sent_at, name from user where email = ?', [$email]);
+		$existing_user = sql_one(
+			"select name,
+				max(0, ? - (strftime('%s', 'now') - coalesce(strftime('%s', u.last_login_link_sent_at), 0))) as seconds_until_next_login_link
+			from user where email = ?",
+			[MIN_SECONDS_BETWEEN_LOGIN_LINK_REQUESTS, $email],
+		);
 		if ($existing_user !== null) {
 			rate_limit_login_by_user($existing_user);
 		}
 		$token = bin2hex(random_bytes(32));
-		write('insert into login_link (token, email) values (?, ?)', [$token, $email]);
+		sql('insert into login_link (token, email) values (?, ?)', [$token, $email]);
 		send_mail($email, 'your speedruns.top login link', 'click to log in: ' . BASE_URL . '/login?token=' . $token . "\n\nif you didn't request this login, please ignore this email.");
 		$confirmation_message = 'a login link is on its way. it expires in 30 minutes.';
 	}

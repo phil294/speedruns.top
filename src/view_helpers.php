@@ -5,9 +5,22 @@ function e(string|int|null $value): string {
 	return htmlspecialchars((string) $value, ENT_QUOTES);
 }
 
-// TODO: this works great but cant be placed inside <p> elements. must use something like button popovertarget with position-anchor instead for correct a11y. maybe this helper needs to go then.
-function help_icon_html(string $text): void {
-	echo '<details class="help"><summary>?</summary><span>' . $text . '</span></details>';
+function render_as_hidden_inputs(array $data, string $name_prefix = ''): void {
+	foreach ($data as $key => $value) {
+		$name = $name_prefix === '' ? (string) $key : "{$name_prefix}[{$key}]";
+		if (is_array($value)) {
+			render_as_hidden_inputs($value, $name);
+		} else {
+			echo '<input type="hidden" name="' . e($name) . '" value="' . e($value) . '">';
+		}
+	}
+}
+
+function help_icon_html(string $html): void {
+	static $help_icon_count = 0;
+	$id = 'help-' . (++$help_icon_count);
+	echo '<button type="button" class="help" popovertarget="' . $id . '" style="anchor-name:--' . $id . ';">?</button>'
+		. '<span id="' . $id . '" popover class="help" style="position-anchor:--' . $id . ';">' . $html . '</span>';
 }
 
 function format_run_time(int $time_milliseconds): string {

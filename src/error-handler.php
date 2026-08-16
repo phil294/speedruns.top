@@ -15,8 +15,12 @@ function log_exception(Throwable $e) {
 		// var_dump($e);
 	} else {
 		$logfile = __DIR__ . '/../data/error.log';
-		// TODO: does the current_user invocation mean that errors while bootstrapping get stuck here?
-		$message = "Type: " . get_class($e) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}; Request: {$_SERVER['REQUEST_METHOD']} {$_SERVER['REQUEST_URI']}; User: " . (current_user()['name'] ?? 'not logged in');
+		try {
+			$user_name = current_user()['name'] ?? 'not logged in';
+		} catch (Throwable) {
+			$user_name = '???';
+		}
+		$message = "Type: " . get_class($e) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}; Request: {$_SERVER['REQUEST_METHOD']} {$_SERVER['REQUEST_URI']}; User: {$user_name}";
 		file_put_contents($logfile, $message . PHP_EOL, FILE_APPEND);
 		notify_site_admin('error on speedruns.top', $message);
 		header('HTTP/1.1 500 Internal Server Error');

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$website = trim((string) ($_POST['website'] ?? ''));
 	$description = trim((string) ($_POST['description'] ?? ''));
 
-	write(
+	sql(
 		'insert into game_request (name, website, description, requested_by) values (?, ?, ?, ?)',
 		[$name, $website !== '' ? $website : null, $description, $current_user['name']],
 	);

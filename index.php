@@ -16,17 +16,6 @@ if ($request_path !== '/') {
 	$request_path = rtrim($request_path, '/');
 }
 
-// TODO: is this stuff really necessary?
-// foreach (['/data/', '/src/', '/templates/', '/schema.sql'] as $forbidden_path_prefix) {
-// 	if (str_starts_with($request_path, $forbidden_path_prefix)) {
-// 		http_response_code(404);
-// 		exit;
-// 	}
-// }
-// if (PHP_SAPI === 'cli-server' && $request_path !== '/' && $request_path !== '/index.php' && is_file(__DIR__ . $request_path)) {
-// 	return false;
-// }
-
 /** @var string|null $path_resource_id */
 $path_resource_id = null;
 if (preg_match('#^/([^/]+)/([^/]+)(/([^/]+))?$#', $request_path, $match)) {
@@ -44,8 +33,9 @@ if (preg_match('#^/([^/]+)/([^/]+)(/([^/]+))?$#', $request_path, $match)) {
 	$breadcrumbs = [["name" => ltrim($request_path, '/')]];
 }
 // die($request_path);
-$page_path = __DIR__ . "/pages{$request_path}.php"; // TODO: safe against ../../.. attacks?
-if(file_exists($page_path)) {
+$pages_directory = realpath(__DIR__ . '/pages');
+$page_path = realpath(__DIR__ . "/pages{$request_path}.php");
+if ($page_path !== false && str_starts_with($page_path, $pages_directory . DIRECTORY_SEPARATOR)) { // avoid `..` attacks
 	require $page_path;
 } else {
 	render_page_not_found();

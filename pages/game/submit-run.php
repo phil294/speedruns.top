@@ -39,12 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
 	}
 
 	transaction(function () use ($current_user, $game_name, $selected_category_name, $time_milliseconds, $proof, $comment, $property_values) {
-		write(
+		sql(
 			'insert into run (user_name, proof, game_name, category_name, time_milliseconds, comment) values (?, ?, ?, ?, ?, ?)',
 			[$current_user['name'], $proof, $game_name, $selected_category_name, $time_milliseconds, $comment],
 		);
 		foreach ($property_values as $property_name => $property_value) {
-			write(
+			sql(
 				'insert into run__property (run_user_name, run_proof, game_name, category_name, property_name, value) values (?, ?, ?, ?, ?, ?)',
 				[$current_user['name'], $proof, $game_name, $selected_category_name, $property_name, $property_value],
 			);
@@ -84,7 +84,6 @@ require __DIR__ . '/../../templates/header.php';
 	<? endforeach; ?>
 	<p><label for="proof">proof</label> <input type="url" id="proof" name="proof" maxlength="500" required value="<?= e($_POST['proof'] ?? '') ?>"> <? help_icon_html('link to a youtube video, twitch stream, or however else your run can be verified.'); ?></p>
 	<p><label for="comment">comment</label> <input type="text" id="comment" name="comment" maxlength="300" value="<?= e($_POST['comment'] ?? '') ?>"></p>
-	<!-- TODO: disabled buttons should be greyed out, different cursor, and not pressable -->
 	<button type="submit" name="action" value="submit_run" <?= $category_names === [] ? 'disabled' : '' ?>>submit run</button>
 </form>
 <?

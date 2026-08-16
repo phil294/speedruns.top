@@ -15,41 +15,28 @@ function rate_limit_action(): void {
 	if ($user === null) {
 		return;
 	}
-	if (!$user['is_site_admin'] && $user['last_action_at'] !== null) {
-		// TODO: move this into sql as computed part of what the current_user() query returns as a `seconds_remaining_until_next_action`, then remove this property from the queried user object
-		$elapsed_seconds = time() - strtotime($user['last_action_at'] . ' UTC');
-		$min_seconds_between_actions = 30;
-		$seconds_remaining = max(0, $min_seconds_between_actions - $elapsed_seconds);
-		if ($seconds_remaining > 0) {
-			render_rate_limit_error($seconds_remaining);
-			exit;
-		}
+	if (!$user['is_site_admin'] && $user['seconds_until_next_action'] > 0) {
+		render_rate_limit_error((int) $user['seconds_until_next_action']);
+		exit;
 	}
-	write('update user set last_action_at = datetime(\'now\') where name = ?', [$user['name']]);
+	sql('update user set last_action_at = datetime(\'now\') where name = ?', [$user['name']]);
 }
 function rate_limit_login_by_user(array $user) {
-	if ($user['last_login_link_sent_at'] !== null) {
-		// TODO: same as above
-		$elapsed_seconds = time() - strtotime($user['last_login_link_sent_at'] . ' UTC');
-		$min_seconds_between_login_link_requests = 15 * 60;
-		$seconds_remaining = max(0, $min_seconds_between_login_link_requests - $elapsed_seconds);
-		if ($seconds_remaining > 0) {
-			render_rate_limit_error($seconds_remaining);
-			exit;
-		}
+	if ($user['seconds_until_next_login_link'] > 0) {
+		render_rate_limit_error((int) $user['seconds_until_next_login_link']);
+		exit;
 	}
-	write('update user set last_login_link_sent_at = datetime(\'now\') where name = ?', [$user['name']]);
+	sql('update user set last_login_link_sent_at = datetime(\'now\') where name = ?', [$user['name']]);
 }
 
 function rate_limit_login_attempts_by_ip() {
 	$ip_address = get_client_ip_address();
 	$attempts_today = (int) sql_one("select count(*) as count from login_link_attempt where ip_address = ? and created_at > datetime('now', '-1 day')", [$ip_address])['count'];
-	$max_login_attempts_per_ip_per_day = 5;
-	if ($attempts_today >= $max_login_attempts_per_ip_per_day) {
+	if ($attempts_today >= MAX_LOGIN_ATTEMPTS_PER_IP_PER_DAY) {
 		render_rate_limit_error(strtotime('tomorrow') - time());
 		exit;
 	}
-	write("insert into login_link_attempt (ip_address) values (?)", [$ip_address]);
+	sql("insert into login_link_attempt (ip_address) values (?)", [$ip_address]);
 }
 
 /** does **not** `exit` */
@@ -61,8 +48,10 @@ function render_rate_limit_error(int $seconds_remaining) {
 	require __DIR__ . '/../templates/header.php';
 	?>
 	<p>error: please wait <?= $seconds_remaining ?> more seconds before doing that. if you think this is an error, please contact admin@speedruns.top</p>
-	<!-- TODO: change this to js-less by resubmitting all $_POST data via hidden inputs -->
-	<button type="button" onclick="location.reload()">try again</button>
+	<form method="post">
+		<? render_as_hidden_inputs($_POST); ?>
+		<button type="submit">try again</button>
+	</form>
 	<?
 	require __DIR__ . '/../templates/footer.php';
 }

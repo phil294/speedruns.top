@@ -20,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			exit;
 		}
 		transaction(function () use ($request) {
-			write('insert into game (name, website) values (?, ?)', [$request['request_name'], $request['request_website']]);
-			write('insert into game_admin (game_name, user_name) values (?, ?)', [$request['request_name'], $request['requester_user_name']]);
-			write('delete from game_request where name = ?', [$request['request_name']]);
+			sql('insert into game (name, website) values (?, ?)', [$request['request_name'], $request['request_website']]);
+			sql('insert into game_admin (game_name, user_name) values (?, ?)', [$request['request_name'], $request['requester_user_name']]);
+			sql('delete from game_request where name = ?', [$request['request_name']]);
 		});
 		send_mail($request['requester_email'], 'your game request was accepted', "\"{$request['request_name']}\" is now live on speedruns.top, and you are its game admin.");
 	} elseif ($action === 'reject_game_request') {
-		write('delete from game_request where name = ?', [$name]);
+		sql('delete from game_request where name = ?', [$name]);
 	}
 	header('Location: /site-admin');
 	exit;

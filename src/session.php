@@ -14,8 +14,11 @@ function current_user(): array|null {
 		return null;
 	}
 
-	$user = sql_one('select u.name, u.email, u.discord_user_id not null as is_discord, u.profile_picture, u.username_changed_at not null as username_already_changed, u.is_site_admin, u.created_at, u.last_action_at, u.last_login_link_sent_at from login_session s join user u on u.name = s.user_name where s.token = ?',
-		[$token],
+	$user = sql_one(
+		"select u.name, u.email, u.discord_user_id not null as is_discord, u.profile_picture, u.username_changed_at not null as username_already_changed, u.is_site_admin, u.created_at,
+			max(0, ? - (strftime('%s', 'now') - coalesce(strftime('%s', u.last_action_at), 0))) as seconds_until_next_action
+		from login_session s join user u on u.name = s.user_name where s.token = ?",
+		[MIN_SECONDS_BETWEEN_ACTIONS, MIN_SECONDS_BETWEEN_LOGIN_LINK_REQUESTS, $token],
 	);
 	return $user;
 }
@@ -31,7 +34,7 @@ function require_login(): array {
 
 function log_in_as(string $user_name): void {
 	$token = bin2hex(random_bytes(32));
-	write('insert into login_session (token, user_name) values (?, ?)', [$token, $user_name]);
+	sql('insert into login_session (token, user_name) values (?, ?)', [$token, $user_name]);
 	setcookie('session', $token, [
 		'expires' => time() + 60 * 60 * 24 * 365 * 10,
 		'path' => '/',
@@ -44,7 +47,7 @@ function log_in_as(string $user_name): void {
 function log_out(): void {
 	$token = $_COOKIE['session'] ?? null;
 	if ($token !== null) {
-		write('delete from login_session where token = ?', [$token]);
+		sql('delete from login_session where token = ?', [$token]);
 	}
 	setcookie('session', '', ['expires' => time() - 3600, 'path' => '/']);
 }

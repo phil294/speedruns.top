@@ -19,29 +19,16 @@ $show_all_runs_per_user = ($_GET['showruns'] ?? '') === 'all';
 $runs = [];
 $property_names = [];
 if ($selected_category !== null) {
-	$runs = /* $show_all_runs_per_user ? */ sql(
-		"select r.user_name, r.proof, r.time_milliseconds, r.comment, r.verified, r.created_at, u.profile_picture, json_group_array(rp.value order by p.name asc) as property_values
+	$runs = sql(
+		"select r.user_name, r.proof, min(r.time_milliseconds) as time_milliseconds, r.comment, r.verified, r.created_at, u.profile_picture, json_group_array(rp.value order by p.name asc) as property_values
 		from run r
 		inner join user u on u.name = r.user_name
 		left join property p on r.game_name = p.game_name and r.category_name = p.category_name
 		left join run__property rp on r.proof = rp.run_proof and r.user_name = rp.run_user_name and p.name = rp.property_name
 		where r.game_name = ? and r.category_name = ? and r.deleted_at is null and (r.verified is null or r.verified = 1)
-		group by r.user_name, r.proof
-		order by r.time_milliseconds asc",
+		group by r.user_name" . ($show_all_runs_per_user ? ', r.proof' : '') . "
+		order by time_milliseconds asc",
 		[$game_name, $selected_category_name]);
-	// ) : sql(
-	// 	// TODO: solve with group/having instead of nesting (but only if not complicated to do so), and then below and above queries into one dynamically built.
-	// 	"select r.user_name, r.proof, r.time_milliseconds, r.comment, r.verified, u.profile_picture from run r
-	// 	join user u on u.name = r.user_name
-	// 	where r.game_name = ? and r.category_name = ? and r.deleted_at is null and (r.verified is null or r.verified = 1)
-	// 	and r.time_milliseconds = (
-	// 		select min(other_run.time_milliseconds) from run as other_run
-	// 		where other_run.user_name = r.user_name and other_run.game_name = run.r and other_run.category_name = r.category_name
-	// 		and other_run.deleted_at is null and (other_run.verified is null or other_run.verified = 1)
-	// 	)
-	// 	order by r.time_milliseconds asc",
-	// 	[$game_name, $selected_category_name],
-	// );
 
 	$property_names = array_column(sql('select name from property where game_name = ? and category_name = ? order by name asc', [$game_name, $selected_category_name]), 'name');
 }
@@ -57,34 +44,39 @@ require __DIR__ . '/../../templates/header.php';
 <p><a href="/game/<?= e($game_name) ?>/admin">manage this game</a></p>
 <? endif; ?>
 
-<? if ($game['image'] !== null): ?>
-<!-- TODO: should be at the right, next to game details and category selection and game rules and cateogory rules -->
-<img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:200px;display:block;">
-<? endif; ?>
-<? if ($game['details']): ?>
-<p><?= nl2br(e($game['details'])) ?></p>
-<? endif; ?>
+<div class="game-header">
+	<div class="game-header-content">
+		<? if ($game['details']): ?>
+		<p><?= nl2br(e($game['details'])) ?></p>
+		<? endif; ?>
 
-<form method="get" action="/game/<?= e($game_name) ?>" class="radio-tabs">
-	<? foreach ($categories as $category): ?>
-	<label><input type="radio" name="category" required value="<?= e($category['name']) ?>" <?= $category['name'] === $selected_category_name ? 'checked' : '' ?> onchange="this.form.submit()"> <?= e($category['name']) ?></label>
-	<? endforeach; ?>
-	<button type="submit">view</button>
-	<span class="spacer"></span>
-	<a href="/game/<?= e($game_name) ?>/submit-run" class="prominent-link">+ submit a run</a>
-</form>
+		<form method="get" action="/game/<?= e($game_name) ?>" class="radio-tabs">
+			<? foreach ($categories as $category): ?>
+			<label><input type="radio" name="category" required value="<?= e($category['name']) ?>" <?= $category['name'] === $selected_category_name ? 'checked' : '' ?> onchange="this.form.submit()"> <?= e($category['name']) ?></label>
+			<? endforeach; ?>
+			<button type="submit">view</button>
+			<span class="spacer"></span>
+			<a href="/game/<?= e($game_name) ?>/submit-run" class="prominent-link">+ submit a run</a>
+		</form>
 
-<!-- TODO: bit more vertical spacing everywhere -->
-<details>
-	<summary>game rules</summary>
-	<?= nl2br(e($game['rules'])) ?>
-</details>
+		<details>
+			<summary>game rules</summary>
+			<?= nl2br(e($game['rules'])) ?>
+		</details>
+
+		<? if ($selected_category !== null): ?>
+		<details>
+			<summary>category rules</summary>
+			<?= nl2br(e($selected_category['rules'])) ?>
+		</details>
+		<? endif; ?>
+	</div>
+	<? if ($game['image'] !== null): ?>
+	<img src="/game/<?= e($game_name) ?>/image" alt="" class="game-image">
+	<? endif; ?>
+</div>
 
 <? if ($selected_category !== null): ?>
-<details>
-	<summary>category rules</summary>
-	<?= nl2br(e($selected_category['rules'])) ?>
-</details>
 <p>
 	<a href="/game/<?= e($game_name) ?>?category=<?= urlencode($selected_category_name) ?><?= $show_all_runs_per_user ? '' : '&showruns=all' ?>">
 		<?= $show_all_runs_per_user ? 'show only best run per player' : 'show all runs per player' ?>

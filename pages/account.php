@@ -35,10 +35,6 @@ require __DIR__ . '/../templates/header.php';
 <p>public profile: <a href="/user/<?= e($current_user['name']) ?>">/user/<?= e($current_user['name']) ?></a></p>
 
 <hr>
-<h3>submitted runs</h3>
-<!-- TODO:. also include unverified. -->
-
-<hr>
 <h3>profile picture</h3>
 <? if ($current_user['profile_picture'] !== null): ?>
 <img src="/user/<?= e($current_user['name']) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">

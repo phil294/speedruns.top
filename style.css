@@ -107,6 +107,27 @@ hr {
 	margin: 8px 0;
 }
 
+details {
+	margin: 10px 0;
+}
+
+.game-header {
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+}
+
+.game-header-content {
+	flex: 1;
+	min-width: 0;
+}
+
+.game-image {
+	max-width: 200px;
+	flex-shrink: 0;
+	display: block;
+}
+
 table {
 	border-collapse: collapse;
 	width: 100%;
@@ -191,6 +212,14 @@ input[type="submit"]:active {
 	transform: translateY(2px);
 }
 
+button:disabled,
+input[type="submit"]:disabled, fieldset:disabled button, fieldset:disabled input[type="submit"] {
+	cursor: not-allowed;
+	color: #948266;
+	background: var(--background);
+	box-shadow: none;
+}
+
 button.secondary {
 	background: transparent;
 	box-shadow: none;
@@ -245,6 +274,7 @@ input[type="radio"] {
 	flex-wrap: wrap;
 	gap: 4px;
 	align-items: center;
+	margin: 10px 0;
 }
 
 .radio-tabs label {
@@ -257,18 +287,12 @@ input[type="radio"] {
 	background: var(--surface);
 }
 
-details.help {
+button.help {
 	display: inline-block;
 	margin-left: 4px;
-	position: relative;
-}
-
-details.help summary {
-	display: inline-block;
-	list-style: none;
-	cursor: pointer;
 	width: 16px;
 	height: 16px;
+	padding: 0;
 	line-height: 14px;
 	text-align: center;
 	border-radius: 50%;
@@ -279,19 +303,8 @@ details.help summary {
 	font-weight: bold;
 }
 
-details.help summary::-webkit-details-marker {
-	display: none;
-}
-
-details.help[open] summary {
-	box-shadow: inset 0 1px 2px var(--shadow);
-}
-
-details.help span {
-	display: block;
-	position: absolute;
-	z-index: 1;
-	margin-top: 4px;
+[popover].help {
+	margin: 0;
 	padding: 4px 6px;
 	background: var(--surface);
 	border: 1px solid var(--border);
@@ -300,6 +313,8 @@ details.help span {
 	width: max-content;
 	max-width: min(460px, 60vw);
 	box-shadow: 0 2px 4px var(--shadow);
+	top: calc(anchor(bottom) + 4px);
+	left: anchor(left);
 }
 
 summary {
