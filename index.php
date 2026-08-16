@@ -7,13 +7,13 @@ require __DIR__ . '/src/bootstrap.php';
 
 $breadcrumbs = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	rate_limit_action();
-}
-
 $request_path = (string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if ($request_path !== '/') {
 	$request_path = rtrim($request_path, '/');
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	rate_limit_action($request_path);
 }
 
 /** @var string|null $path_resource_id */

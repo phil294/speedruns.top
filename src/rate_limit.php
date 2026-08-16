@@ -10,7 +10,10 @@ function get_client_ip_address(): string {
 	return $ip_address;
 }
 
-function rate_limit_action(): void {
+function rate_limit_action(string $path): void {
+	if($path === '/logout') {
+		return;
+	}
 	$user = current_user();
 	if ($user === null) {
 		return;
