@@ -19,10 +19,10 @@ if ($request_path !== '/') {
 /** @var string|null $path_resource_id */
 $path_resource_id = null;
 if (preg_match('#^/([^/]+)/([^/]+)(/([^/]+))?$#', $request_path, $match)) {
-	$path_resource_id = $match[2];
+	$path_resource_id = urldecode($match[2]);
 	$breadcrumbs = [
 		["name" => $match[1], "url" => "/{$match[1]}"],
-		["name" => $match[2], "url" => "/{$match[1]}/{$match[2]}"]];
+		["name" => $path_resource_id, "url" => "/{$match[1]}/{$match[2]}"]];
 	if($match[3] ?? null) {
 		$breadcrumbs[] =["name" => $match[4], "url" => "/{$match[1]}/{$match[2]}{$match[3]}"];
 	}
