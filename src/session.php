@@ -18,7 +18,7 @@ function current_user(): array|null {
 		"select u.name, u.email, u.discord_user_id not null as is_discord, u.profile_picture, u.username_changed_at not null as username_already_changed, u.is_site_admin, u.created_at,
 			max(0, ? - (strftime('%s', 'now') - coalesce(strftime('%s', u.last_action_at), 0))) as seconds_until_next_action
 		from login_session s join user u on u.name = s.user_name where s.token = ?",
-		[MIN_SECONDS_BETWEEN_ACTIONS, MIN_SECONDS_BETWEEN_LOGIN_LINK_REQUESTS, $token],
+		[MIN_SECONDS_BETWEEN_ACTIONS, $token],
 	);
 	return $user;
 }
