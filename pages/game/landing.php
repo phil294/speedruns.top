@@ -82,7 +82,7 @@ require __DIR__ . '/../../templates/header.php';
 		<?= $show_all_runs_per_user ? 'show only best run per player' : 'show all runs per player' ?>
 	</a>
 </p>
-<table>
+<table class="leaderboard">
 	<thead>
 		<tr>
 			<th>#</th>

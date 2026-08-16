@@ -1,9 +1,10 @@
 <?
 $title = $breadcrumbs[array_key_last($breadcrumbs) ?? '']['name'] ?? null;
 $current_user = current_user();
+$theme_preference = $_COOKIE['theme'] ?? null;
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="en"<?= $theme_preference !== null ? ' data-theme="' . e($theme_preference) . '"' : '' ?>>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,6 +26,8 @@ $current_user = current_user();
 				<? endforeach; ?>
 			</div>
 			<span class="spacer"></span>
+			<a href="/set-theme?value=light" class="theme-link<?= $theme_preference === 'light' ? ' active' : '' ?>" title="light theme">☀</a>
+			<a href="/set-theme?value=dark" class="theme-link<?= $theme_preference === 'dark' ? ' active' : '' ?>" title="dark theme">🌙</a>
 			<? if ($current_user !== null): ?>
 			<a href="/user/<?= e($current_user['name']) ?>"><?= e($current_user['name']) ?></a>
 			<a href="/account">account</a>

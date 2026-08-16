@@ -62,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
 require __DIR__ . '/../../templates/header.php';
 ?>
 <form method="post">
+	<!-- invisible default submit button so pressing enter in any text field submits the run instead of the (first, but visually last) change-category button -->
+	<button type="submit" name="action" value="submit_run" tabindex="-1" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;" <?= $category_names === [] ? 'disabled' : '' ?>></button>
 	<p class="radio-tabs">
 		category
 		<? foreach ($category_names as $category): ?>
