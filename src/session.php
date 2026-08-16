@@ -40,7 +40,7 @@ function log_in_as(string $user_name): void {
 		'path' => '/',
 		'secure' => COOKIE_SECURE,
 		'httponly' => true,
-		'samesite' => 'Strict',
+		'samesite' => 'Lax', // can't use strict bc discord
 	]);
 }
 

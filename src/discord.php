@@ -18,6 +18,9 @@ function discord_fetch_user_for_code(string $authorization_code): array {
 		'code' => $authorization_code,
 		'redirect_uri' => DISCORD_REDIRECT_URI,
 	]);
+	if (!isset($token_response['access_token'])) {
+		throw new RuntimeException('discord token request failed: ' . json_encode($token_response));
+	}
 
 	$curl_handle = curl_init('https://discord.com/api/users/@me');
 	curl_setopt_array($curl_handle, [
@@ -25,7 +28,7 @@ function discord_fetch_user_for_code(string $authorization_code): array {
 		CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $token_response['access_token']],
 	]);
 	$response_body = curl_exec($curl_handle);
-	curl_close($curl_handle);
+	// curl_close($curl_handle);
 
 	return json_decode((string) $response_body, true);
 }
@@ -35,9 +38,10 @@ function discord_api_request(string $url, array $post_fields): array {
 	curl_setopt_array($curl_handle, [
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_POST => true,
+		CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
 		CURLOPT_POSTFIELDS => http_build_query($post_fields),
 	]);
 	$response_body = curl_exec($curl_handle);
-	curl_close($curl_handle);
+	// curl_close($curl_handle);
 	return json_decode((string) $response_body, true);
 }

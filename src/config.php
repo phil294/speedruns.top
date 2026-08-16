@@ -2,10 +2,11 @@
 declare(strict_types=1);
 
 const SITE_ADMIN_EMAIL = 'admin@speedruns.top';
-const BASE_URL = 'https://speedruns.top';
-// Set these in ../config.local.php
-const DISCORD_CLIENT_ID = '';
-const DISCORD_CLIENT_SECRET = '';
+// Set these in ../config.local.php:
+// const BASE_URL = 'https://speedruns.top';
+// const DEBUG_PRINT_MAILS = false;
+// const DISCORD_CLIENT_ID = '';
+// const DISCORD_CLIENT_SECRET = '';
 const DISCORD_REDIRECT_URI = BASE_URL . '/discord-callback';
 
 const MIN_SECONDS_BETWEEN_ACTIONS = 30;

@@ -1,6 +1,7 @@
 <?
 declare(strict_types=1);
 
+require __DIR__ . '/../config.local.php';
 require __DIR__ . '/config.php';
 require __DIR__ . '/database.php';
 require __DIR__ . '/view_helpers.php';
