@@ -1,3 +1,4 @@
 /data/*.sqlite
 /data/*.sqlite-*
 /data/queries.log
+/config.local.php
