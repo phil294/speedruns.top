@@ -2,11 +2,11 @@
 declare(strict_types=1);
 
 function send_mail(string $to_address, string $subject, string $body): void {
-	if(DEBUG) {
-		echo "MAIL DEBUG\n$subject\n\n$body";
-	} else {
+	// if(DEBUG) {
+	// 	echo "MAIL DEBUG\n$subject\n\n$body";
+	// } else {
 		mail($to_address, $subject, $body, "From: speedruns.top <admin@speedruns.top>\r\n");
-	}
+	// }
 }
 
 function notify_site_admin(string $subject, string $body): void {
