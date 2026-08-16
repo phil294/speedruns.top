@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $current_user = require_login();
@@ -37,7 +37,7 @@ $game_requests = sql('select name, description, requested_by from game_request o
 require __DIR__ . '/../templates/header.php';
 ?>
 <h3>pending game requests (<?= count($game_requests) ?>)</h3>
-<?php foreach ($game_requests as $game_request): ?>
+<? foreach ($game_requests as $game_request): ?>
 <p>
 	<strong><?= e($game_request['name']) ?></strong> requested by <?= e($game_request['requested_by']) ?><br>
 	<?= nl2br(e($game_request['description'])) ?>
@@ -52,6 +52,6 @@ require __DIR__ . '/../templates/header.php';
 		<button type="submit">reject</button>
 	</form>
 </p>
-<?php endforeach; ?>
-<?php
+<? endforeach; ?>
+<?
 require __DIR__ . '/../templates/footer.php';

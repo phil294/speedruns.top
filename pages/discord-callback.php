@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $authorization_code = $_GET['code'] ?? null;

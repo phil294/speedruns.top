@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $game_name = $path_resource_id;
@@ -53,22 +53,22 @@ $current_user_manages_game = $current_user !== null && ($current_user['is_site_a
 
 require __DIR__ . '/../../templates/header.php';
 ?>
-<?php if ($current_user_manages_game): ?>
+<? if ($current_user_manages_game): ?>
 <p><a href="/game/<?= e($game_name) ?>/admin">manage this game</a></p>
-<?php endif; ?>
+<? endif; ?>
 
-<?php if ($game['image'] !== null): ?>
+<? if ($game['image'] !== null): ?>
 <!-- TODO: should be at the right, next to game details and category selection and game rules and cateogory rules -->
 <img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:200px;display:block;">
-<?php endif; ?>
-<?php if ($game['details']): ?>
+<? endif; ?>
+<? if ($game['details']): ?>
 <p><?= nl2br(e($game['details'])) ?></p>
-<?php endif; ?>
+<? endif; ?>
 
 <form method="get" action="/game/<?= e($game_name) ?>" class="radio-tabs">
-	<?php foreach ($categories as $category): ?>
+	<? foreach ($categories as $category): ?>
 	<label><input type="radio" name="category" required value="<?= e($category['name']) ?>" <?= $category['name'] === $selected_category_name ? 'checked' : '' ?> onchange="this.form.submit()"> <?= e($category['name']) ?></label>
-	<?php endforeach; ?>
+	<? endforeach; ?>
 	<button type="submit">view</button>
 	<span class="spacer"></span>
 	<a href="/game/<?= e($game_name) ?>/submit-run" class="prominent-link">+ submit a run</a>
@@ -80,7 +80,7 @@ require __DIR__ . '/../../templates/header.php';
 	<?= nl2br(e($game['rules'])) ?>
 </details>
 
-<?php if ($selected_category !== null): ?>
+<? if ($selected_category !== null): ?>
 <details>
 	<summary>category rules</summary>
 	<?= nl2br(e($selected_category['rules'])) ?>
@@ -96,46 +96,46 @@ require __DIR__ . '/../../templates/header.php';
 			<th>#</th>
 			<th>time</th>
 			<th>player</th>
-			<?php foreach ($property_names as $property): ?>
+			<? foreach ($property_names as $property): ?>
 			<th><?= e($property) ?></th>
-			<?php endforeach; ?>
+			<? endforeach; ?>
 			<th>date</th>
 			<th>proof</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($runs as $run): ?>
+		<? foreach ($runs as $run): ?>
 		<tr class="<?= $run['verified'] ? 'verified' : '' ?>">
 			<td></td>
 			<td><?= e(format_run_time((int) $run['time_milliseconds'])) ?></td>
 			<td>
-				<?php if ($run['profile_picture'] !== null): ?>
+				<? if ($run['profile_picture'] !== null): ?>
 				<img class="avatar" src="/user/<?= e($run['user_name']) ?>/picture" alt="">
-				<?php endif; ?>
+				<? endif; ?>
 				<a href="/user/<?= e($run['user_name']) ?>"><?= e($run['user_name']) ?></a>
 			</td>
-			<?php foreach (json_decode($run['property_values']) as $property): ?>
+			<? foreach (json_decode($run['property_values']) as $property): ?>
 			<td><?= e($property ?? '') ?></td>
-			<?php endforeach; ?>
+			<? endforeach; ?>
 			<td><?= e(format_date($run['created_at'])) ?></td>
 			<td><a href="<?= e($run['proof']) ?>">link</a></td>
 			<td><?= $run['verified'] === null ? '<span class="tag">unverified</span>' : '' ?></td>
 		</tr>
-		<?php endforeach; ?>
+		<? endforeach; ?>
 	</tbody>
 </table>
-<?php else: ?>
+<? else: ?>
 <p>no run categories configured yet.</p>
-<?php endif; ?>
+<? endif; ?>
 
 <hr>
-<p><?php help_icon_html('game admins and moderators verify submitted runs. game admins edit the categories and set mandatory run properties.'); ?></p>
-<?php foreach ($game_admin_user_names as $admin): ?>
+<p><? help_icon_html('game admins and moderators verify submitted runs. game admins edit the categories and set mandatory run properties.'); ?></p>
+<? foreach ($game_admin_user_names as $admin): ?>
 <p><?= e($admin) ?> - admin</p>
-<?php endforeach; ?>
-<?php foreach ($game_moderator_user_names as $moderator): ?>
+<? endforeach; ?>
+<? foreach ($game_moderator_user_names as $moderator): ?>
 <p><?= e($moderator) ?> - moderator</p>
-<?php endforeach; ?>
-<?php
+<? endforeach; ?>
+<?
 require __DIR__ . '/../../templates/footer.php';

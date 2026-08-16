@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $game = sql_one('select image from game where name = ?', [$path_resource_id]);

@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $login_link_expiry_seconds = 30 * 60;
@@ -44,20 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 require __DIR__ . '/../templates/header.php';
 ?>
-<?php if (isset($confirmation_message)): ?>
+<? if (isset($confirmation_message)): ?>
 <p><?= e($confirmation_message) ?></p>
-<?php endif; ?>
+<? endif; ?>
 <form method="post" action="/login">
 	<label for="email">email</label>
 	<input type="email" id="email" name="email" maxlength="254" required>
-	<?php /* honeypot */ ?>
+	<? /* honeypot */ ?>
 	<input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;">
 	<button type="submit">send login link</button>
-	<?php help_icon_html("we'll email you a one-time link. this site uses no passwords. new addresses get a speedruns.top account automatically upon clicking the link."); ?>
+	<? help_icon_html("we'll email you a one-time link. this site uses no passwords. new addresses get a speedruns.top account automatically upon clicking the link."); ?>
 </form>
 <hr>
 <form method="get" action="/discord-login">
 	<button type="submit">login with discord</button>
 </form>
-<?php
+<?
 require __DIR__ . '/../templates/footer.php';

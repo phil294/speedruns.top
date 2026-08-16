@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 function get_client_ip_address(): string {
@@ -63,6 +63,6 @@ function render_rate_limit_error(int $seconds_remaining) {
 	<p>error: please wait <?= $seconds_remaining ?> more seconds before doing that. if you think this is an error, please contact admin@speedruns.top</p>
 	<!-- TODO: change this to js-less by resubmitting all $_POST data via hidden inputs -->
 	<button type="button" onclick="location.reload()">try again</button>
-	<?php
+	<?
 	require __DIR__ . '/../templates/footer.php';
 }

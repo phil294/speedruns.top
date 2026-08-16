@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 function send_mail(string $to_address, string $subject, string $body): void {

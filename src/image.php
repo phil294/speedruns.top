@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 function scale_image_to_max_dimension(string $binary_image_data, int $max_dimension): string {

@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 rate_limit_login_attempts_by_ip();

@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $current_user = require_login();
@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require __DIR__ . '/../templates/header.php';
 
 help_icon_html('accepted requests make you the permanent game admin for that game.'); ?>
-<?php if (isset($confirmation_message)): ?>
+<? if (isset($confirmation_message)): ?>
 <p><?= e($confirmation_message) ?></p>
-<?php endif; ?>
+<? endif; ?>
 <form method="post" action="/game-add">
 	<p><label for="name">game name</label> <input type="text" id="name" name="name" maxlength="100" required value="<?= e($_POST['name'] ?? '') ?>"></p>
 	<p><label for="website">website/wiki</label> <input type="url" id="website" name="website" maxlength="300" required value="<?= e($_POST['website'] ?? '') ?>"></p>
@@ -29,5 +29,5 @@ help_icon_html('accepted requests make you the permanent game admin for that gam
 	<button type="submit">request game</button>
 </form>
 <p>accepted requests make you the permanent game admin for that game.</p>
-<?php
+<?
 require __DIR__ . '/../templates/footer.php';

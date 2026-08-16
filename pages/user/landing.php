@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $user_name = $path_resource_id;
@@ -18,21 +18,21 @@ $submissions = sql(
 
 require __DIR__ . '/../../templates/header.php';
 ?>
-<?php if ($user['profile_picture'] !== null): ?>
+<? if ($user['profile_picture'] !== null): ?>
 <img src="/user/<?= e($user_name) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">
-<?php endif; ?>
+<? endif; ?>
 <p>member since <?= e(format_date($user['created_at'])) ?></p>
 
 <h3>submissions (<?= count($submissions) ?>)</h3>
 <table>
-	<?php foreach ($submissions as $run): ?>
+	<? foreach ($submissions as $run): ?>
 	<tr>
 		<td><?= e(format_date($run['created_at'])) ?></td>
 		<td><a href="/game/<?= e($run['game_name']) ?>"><?= e($run['game_name']) ?></a> / <?= e($run['category_name']) ?></td>
 		<td><?= e(format_run_time((int) $run['time_milliseconds'])) ?></td>
 		<td><span class="tag"><?= $run['verified'] === null ? 'pending' : ($run['verified'] === 1 ? 'verified' : 'rejected') ?></span></td>
 	</tr>
-	<?php endforeach; ?>
+	<? endforeach; ?>
 </table>
-<?php
+<?
 require __DIR__ . '/../../templates/footer.php';

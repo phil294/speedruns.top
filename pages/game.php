@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $games = sql(
@@ -14,13 +14,13 @@ require __DIR__ . '/../templates/header.php';
 ?>
 <a href="/game-add" class="prominent-link" style="float:right;">+ add a game</a></h3>
 <table>
-	<?php foreach ($games as $game): ?>
+	<? foreach ($games as $game): ?>
 	<tr>
 		<td><a href="/game/<?= e($game['name']) ?>"><?= e($game['name']) ?></a></td>
 		<td><?= e((int) $game['category_count']) ?> categories</td>
 		<td><?= e((int) $game['run_count']) ?> runs</td>
 	</tr>
-	<?php endforeach; ?>
+	<? endforeach; ?>
 </table>
-<?php
+<?
 require __DIR__ . '/../templates/footer.php';

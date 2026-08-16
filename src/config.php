@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 const SITE_ADMIN_EMAIL = 'admin@speedruns.top';

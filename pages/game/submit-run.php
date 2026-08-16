@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $game_name = $path_resource_id;
@@ -64,9 +64,9 @@ require __DIR__ . '/../../templates/header.php';
 <form method="post" action="/game/<?= e($game_name) ?>/submit-run">
 	<p class="radio-tabs">
 		category
-		<?php foreach ($category_names as $category): ?>
+		<? foreach ($category_names as $category): ?>
 		<label><input type="radio" name="category" required value="<?= e($category) ?>" <?= $category === $selected_category_name ? 'checked' : '' ?> onchange="this.form.submit()"> <?= e($category) ?></label>
-		<?php endforeach; ?>
+		<? endforeach; ?>
 		<button type="submit" name="action" value="change_category" formnovalidate>change category</button>
 	</p>
 	<p>
@@ -79,13 +79,13 @@ require __DIR__ . '/../../templates/header.php';
 		<label for="milliseconds">milliseconds</label>
 		<input type="number" id="milliseconds" name="milliseconds" min="0" max="999" style="width:5em;" value="<?= e($_POST['milliseconds'] ?? '0') ?>">
 	</p>
-	<?php foreach ($properties as $property): ?>
+	<? foreach ($properties as $property): ?>
 	<p><label><?= e($property['name']) ?></label> <input type="text" name="property[<?= e($property['name']) ?>]" maxlength="200" required value="<?= e($_POST['property'][$property['name']] ?? '') ?>"></p>
-	<?php endforeach; ?>
-	<p><label for="proof">proof</label> <input type="url" id="proof" name="proof" maxlength="500" required value="<?= e($_POST['proof'] ?? '') ?>"> <?php help_icon_html('link to a youtube video, twitch stream, or however else your run can be verified.'); ?></p>
+	<? endforeach; ?>
+	<p><label for="proof">proof</label> <input type="url" id="proof" name="proof" maxlength="500" required value="<?= e($_POST['proof'] ?? '') ?>"> <? help_icon_html('link to a youtube video, twitch stream, or however else your run can be verified.'); ?></p>
 	<p><label for="comment">comment</label> <input type="text" id="comment" name="comment" maxlength="300" value="<?= e($_POST['comment'] ?? '') ?>"></p>
 	<!-- TODO: disabled buttons should be greyed out, different cursor, and not pressable -->
 	<button type="submit" name="action" value="submit_run" <?= $category_names === [] ? 'disabled' : '' ?>>submit run</button>
 </form>
-<?php
+<?
 require __DIR__ . '/../../templates/footer.php';

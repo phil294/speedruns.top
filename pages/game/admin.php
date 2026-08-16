@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $game_name = $path_resource_id;
@@ -105,11 +105,11 @@ $rejected_runs = sql(
 
 require __DIR__ . '/../../templates/header.php';
 ?>
-<h3>categories (<?= count($categories) ?> / 20) <?php help_icon_html('a game needs between 1 and 20 categories. example categories: any%, 100% glitchless, level 1-10. each category gets its own leaderboard. categories\' properties are optional and meant for informative values such as chosen character class. properties are required to be filled in when submitting a run.'); ?></h3>
-<?php foreach ($categories as $category): ?>
+<h3>categories (<?= count($categories) ?> / 20) <? help_icon_html('a game needs between 1 and 20 categories. example categories: any%, 100% glitchless, level 1-10. each category gets its own leaderboard. categories\' properties are optional and meant for informative values such as chosen character class. properties are required to be filled in when submitting a run.'); ?></h3>
+<? foreach ($categories as $category): ?>
 <fieldset>
 	<legend><?= e($category['name']) ?></legend>
-	<?php if ($current_user_is_admin): ?>
+	<? if ($current_user_is_admin): ?>
 	<form method="post" action="/game/<?= e($game_name) ?>/admin">
 		<input type="hidden" name="action" value="edit_category_rules">
 		<input type="hidden" name="name" value="<?= e($category['name']) ?>">
@@ -117,7 +117,7 @@ require __DIR__ . '/../../templates/header.php';
 	</form>
 	<div>
 		properties:
-		<?php foreach (json_decode($category['properties']) as $property): ?>
+		<? foreach (json_decode($category['properties']) as $property): ?>
 		<span class="tag"><?= e($property) ?>
 			<!-- TODO: why not action='.' for all of these in all files -->
 			<form method="post" action="/game/<?= e($game_name) ?>/admin" style="display:inline;">
@@ -127,7 +127,7 @@ require __DIR__ . '/../../templates/header.php';
 				<button type="submit" class="secondary">x</button>
 			</form>
 		</span>
-		<?php endforeach; ?>
+		<? endforeach; ?>
 	</div>
 	<form method="post" action="/game/<?= e($game_name) ?>/admin">
 		<input type="hidden" name="action" value="add_category_property">
@@ -140,35 +140,35 @@ require __DIR__ . '/../../templates/header.php';
 		<input type="hidden" name="name" value="<?= e($category['name']) ?>">
 		<button type="submit">remove category</button>
 	</form>
-	<?php endif; ?>
+	<? endif; ?>
 </fieldset>
-<?php endforeach; ?>
-<?php if ($current_user_is_admin): ?>
+<? endforeach; ?>
+<? if ($current_user_is_admin): ?>
 <form method="post" action="/game/<?= e($game_name) ?>/admin">
 	<input type="hidden" name="action" value="add_category">
 	<input type="text" name="name" maxlength="50" placeholder="category name" required>
 	<button type="submit">+ add category</button>
 </form>
-<?php endif; ?>
+<? endif; ?>
 
 <hr>
-<h3>admins &amp; moderators <?php help_icon_html('game admins keep their role forever and may add other admins and moderators. moderators can be removed again.'); ?></h3>
-<?php foreach ($game_admin_user_names as $admin_name): ?>
+<h3>admins &amp; moderators <? help_icon_html('game admins keep their role forever and may add other admins and moderators. moderators can be removed again.'); ?></h3>
+<? foreach ($game_admin_user_names as $admin_name): ?>
 <p><?= e($admin_name) ?> - admin (permanent)</p>
-<?php endforeach; ?>
-<?php foreach ($game_moderator_user_names as $moderator_name): ?>
+<? endforeach; ?>
+<? foreach ($game_moderator_user_names as $moderator_name): ?>
 <p>
 	<?= e($moderator_name) ?> - moderator
-	<?php if ($current_user_is_admin): ?>
+	<? if ($current_user_is_admin): ?>
 	<form method="post" action="/game/<?= e($game_name) ?>/admin" style="display:inline;">
 		<input type="hidden" name="action" value="remove_moderator">
 		<input type="hidden" name="user_name" value="<?= e($moderator_name) ?>">
 		<button type="submit">remove</button>
 	</form>
-	<?php endif; ?>
+	<? endif; ?>
 </p>
-<?php endforeach; ?>
-<?php if ($current_user_is_admin): ?>
+<? endforeach; ?>
+<? if ($current_user_is_admin): ?>
 <form method="post" action="/game/<?= e($game_name) ?>/admin">
 	<input type="hidden" name="action" value="add_admin_or_moderator">
 	<label for="user_name">add user</label> <input type="text" id="user_name" name="user_name" maxlength="32" required>
@@ -177,12 +177,12 @@ require __DIR__ . '/../../templates/header.php';
 	<label><input type="radio" name="role" value="admin"> admin</label>
 	<button type="submit">add</button>
 </form>
-<?php endif; ?>
+<? endif; ?>
 
 <hr>
 <!-- TODO: moderators verifying their own isn't prevented yet as this help icon says but should be -->
-<h3>pending runs (<?= count($pending_runs) ?>) <?php help_icon_html('game admins and moderators can verify runs. game admins may even verify their own runs.'); ?></h3>
-<?php foreach ($pending_runs as $run): ?>
+<h3>pending runs (<?= count($pending_runs) ?>) <? help_icon_html('game admins and moderators can verify runs. game admins may even verify their own runs.'); ?></h3>
+<? foreach ($pending_runs as $run): ?>
 <p>
 	<?= e($run['user_name']) ?> &nbsp; <?= e($run['category_name']) ?> &nbsp; <?= e(format_run_time((int) $run['time_milliseconds'])) ?> &nbsp;
 	<a href="<?= e($run['proof']) ?>">link</a>
@@ -199,11 +199,11 @@ require __DIR__ . '/../../templates/header.php';
 		<button type="submit">reject</button>
 	</form>
 </p>
-<?php endforeach; ?>
+<? endforeach; ?>
 
 <hr>
-<h3>rejected runs (<?= count($rejected_runs) ?>) <?php help_icon_html('these can be restored back to pending.'); ?></h3>
-<?php foreach ($rejected_runs as $run): ?>
+<h3>rejected runs (<?= count($rejected_runs) ?>) <? help_icon_html('these can be restored back to pending.'); ?></h3>
+<? foreach ($rejected_runs as $run): ?>
 <p style="text-decoration:line-through;">
 	<?= e($run['user_name']) ?> &nbsp; <?= e($run['category_name']) ?> &nbsp; <?= e(format_run_time((int) $run['time_milliseconds'])) ?>
 	<form method="post" action="/game/<?= e($game_name) ?>/admin" style="display:inline; text-decoration:none;">
@@ -213,14 +213,14 @@ require __DIR__ . '/../../templates/header.php';
 		<button type="submit">restore</button>
 	</form>
 </p>
-<?php endforeach; ?>
+<? endforeach; ?>
 
-<?php if ($current_user_is_admin): ?>
+<? if ($current_user_is_admin): ?>
 <hr>
 <h3>game details</h3>
-<?php if ($game['image'] !== null): ?>
+<? if ($game['image'] !== null): ?>
 <img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:100px;max-height:100px;display:block;">
-<?php endif; ?>
+<? endif; ?>
 <form method="post" action="/game/<?= e($game_name) ?>/admin" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="upload_game_image">
 	<p>game image <?= $game['image'] !== null ? '(current image set)' : '(no image set)' ?> <input type="file" name="image" accept="image/*" required> <button type="submit">upload</button></p>
@@ -234,6 +234,6 @@ require __DIR__ . '/../../templates/header.php';
 </form>
 
 <p>if you're missing a feature or have any other problems, please contact us via <a href="mailto:<?= SITE_ADMIN_EMAIL ?>"><?= SITE_ADMIN_EMAIL ?></a></p>
-<?php endif; ?>
-<?php
+<? endif; ?>
+<?
 require __DIR__ . '/../../templates/footer.php';

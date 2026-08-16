@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  * Catch-all solution for errors, taken from some php.net comment
  * https://www.php.net/manual/en/function.set-error-handler.php#112291
@@ -9,7 +9,7 @@ function log_error($num, $str, $file, $line, $context = null) {
 }
 function log_exception(Throwable $e) {
 	if (DEBUG) {
-		?><pre><?php
+		?><pre><?
 		echo get_class($e) . "\n{$e->getMessage()}\nFile: {$e->getFile()}\nLine: {$e->getLine()}\n\n";
 		echo $e->getTraceAsString();
 		// var_dump($e);

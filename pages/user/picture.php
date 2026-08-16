@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $user = sql_one('select profile_picture from user where name = ?', [$path_resource_id]);

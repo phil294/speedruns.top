@@ -1,4 +1,4 @@
-<?php
+<?
 declare(strict_types=1);
 
 $current_user = require_login();
@@ -29,9 +29,9 @@ require __DIR__ . '/../templates/header.php';
 ?>
 
 <p>username: <?= e($current_user['name']) ?></p>
-<?php if ($current_user['email'] !== null): ?>
+<? if ($current_user['email'] !== null): ?>
 <p>email: <?= e($current_user['email']) ?></p>
-<?php endif; ?>
+<? endif; ?>
 <p>public profile: <a href="/user/<?= e($current_user['name']) ?>">/user/<?= e($current_user['name']) ?></a></p>
 
 <hr>
@@ -40,9 +40,9 @@ require __DIR__ . '/../templates/header.php';
 
 <hr>
 <h3>profile picture</h3>
-<?php if ($current_user['profile_picture'] !== null): ?>
+<? if ($current_user['profile_picture'] !== null): ?>
 <img src="/user/<?= e($current_user['name']) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">
-<?php endif; ?>
+<? endif; ?>
 <form method="post" action="/account" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="upload_profile_picture">
 	<p><?= $current_user['profile_picture'] !== null ? '(current picture set)' : '(no picture set)' ?> <input type="file" name="picture" accept="image/*" required> <button type="submit">upload</button></p>
@@ -50,15 +50,15 @@ require __DIR__ . '/../templates/header.php';
 
 <hr>
 <h3>change username</h3>
-<?php if ($current_user['username_already_changed']): ?>
+<? if ($current_user['username_already_changed']): ?>
 <p>you have already used your one-time username change.</p>
-<?php else: ?>
+<? else: ?>
 <p>you may change your username ONLY ONCE. choose carefully, this cannot be undone!</p>
 <form method="post" action="/account">
 	<input type="hidden" name="action" value="change_username">
 	<label for="new_username">new username</label> <input type="text" id="new_username" name="new_username" maxlength="32" required>
 	<button type="submit">change username (once, permanently)</button>
 </form>
-<?php endif; ?>
-<?php
+<? endif; ?>
+<?
 require __DIR__ . '/../templates/footer.php';

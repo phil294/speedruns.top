@@ -1,4 +1,4 @@
-<?php
+<?
 $title = array_last($breadcrumbs)['name'] ?? null;
 $current_user = current_user();
 ?>
@@ -15,33 +15,33 @@ $current_user = current_user();
 		<nav>
 			<div class="breadcrumbs">
 				<a href="/"><strong>speedruns.top</strong></a>
-				<?php foreach ($breadcrumbs as $breadcrumb): ?>
+				<? foreach ($breadcrumbs as $breadcrumb): ?>
 				<span>&gt;</span>
-				<?php if (($breadcrumb['url'] ?? null) === null): ?>
+				<? if (($breadcrumb['url'] ?? null) === null): ?>
 				<span><?= e($breadcrumb['name']) ?></span>
-				<?php else: ?>
+				<? else: ?>
 				<a href="<?= e($breadcrumb['url']) ?>"><?= e($breadcrumb['name']) ?></a>
-				<?php endif; ?>
-				<?php endforeach; ?>
+				<? endif; ?>
+				<? endforeach; ?>
 			</div>
 			<span class="spacer"></span>
-			<?php if ($current_user !== null): ?>
+			<? if ($current_user !== null): ?>
 			<span><?= e($current_user['name']) ?></span>
 			<a href="/account">account</a>
-			<?php if ($current_user['is_site_admin']): ?>
+			<? if ($current_user['is_site_admin']): ?>
 			<a href="/site-admin">site admin</a>
-			<?php endif; ?>
+			<? endif; ?>
 			<form method="post" action="/logout"><button type="submit" class="secondary">logout</button></form>
-			<?php else: ?>
+			<? else: ?>
 			<a href="/login">login/register</a>
 			<form method="get" action="/discord-login"><button type="submit" class="secondary">discord login</button></form>
-			<?php endif; ?>
+			<? endif; ?>
 		</nav>
 	</header>
 	<main>
-		<?php if($title): ?>
+		<? if($title): ?>
 		<h2><?= e($title) ?></h2>
-		<?php endif; ?>
-		<?php if (isset($error_message)): ?>
+		<? endif; ?>
+		<? if (isset($error_message)): ?>
 		<p style="color:darkred; font-weight:bold;"><?= e($error_message) ?></p>
-		<?php endif; ?>
+		<? endif; ?>
