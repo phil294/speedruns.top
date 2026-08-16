@@ -14,7 +14,7 @@ $current_user = current_user();
 	<header>
 		<nav>
 			<div class="breadcrumbs">
-				<a href="/"><strong>speedruns.top</strong></a>
+				<a href="/" style="text-decoration: none;"><strong>speedruns.top</strong></a>
 				<? foreach ($breadcrumbs as $breadcrumb): ?>
 				<span>&gt;</span>
 				<? if (($breadcrumb['url'] ?? null) === null): ?>
@@ -26,7 +26,7 @@ $current_user = current_user();
 			</div>
 			<span class="spacer"></span>
 			<? if ($current_user !== null): ?>
-			<span><?= e($current_user['name']) ?></span>
+			<a href="/user/<?= e($current_user['name']) ?>"><?= e($current_user['name']) ?></a>
 			<a href="/account">account</a>
 			<? if ($current_user['is_site_admin']): ?>
 			<a href="/site-admin">site admin</a>

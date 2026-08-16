@@ -51,7 +51,7 @@ require __DIR__ . '/../templates/header.php';
 <? if (isset($confirmation_message)): ?>
 <p><?= e($confirmation_message) ?></p>
 <? endif; ?>
-<form method="post" action="/login">
+<form method="post">
 	<label for="email">email</label>
 	<input type="email" id="email" name="email" maxlength="254" required>
 	<? /* honeypot */ ?>

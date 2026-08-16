@@ -50,7 +50,7 @@ require __DIR__ . '/../../templates/header.php';
 		<p><?= nl2br(e($game['details'])) ?></p>
 		<? endif; ?>
 
-		<form method="get" action="/game/<?= e($game_name) ?>" class="radio-tabs">
+		<form method="get" class="radio-tabs">
 			<? foreach ($categories as $category): ?>
 			<label><input type="radio" name="category" required value="<?= e($category['name']) ?>" <?= $category['name'] === $selected_category_name ? 'checked' : '' ?> onchange="this.form.submit()"> <?= e($category['name']) ?></label>
 			<? endforeach; ?>

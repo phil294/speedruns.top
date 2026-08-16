@@ -41,17 +41,17 @@ nav .spacer {
 }
 
 nav a {
-	text-decoration: none;
 	color: var(--accent);
 	white-space: nowrap;
 }
 
-nav a:hover {
-	text-decoration: underline;
-}
-
 nav form {
 	margin: 0;
+}
+
+.breadcrumbs > *:last-child {
+	font-weight: bold;
+	text-decoration: none;
 }
 
 a:link {

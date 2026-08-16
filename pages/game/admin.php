@@ -116,7 +116,7 @@ require __DIR__ . '/../../templates/header.php';
 <fieldset>
 	<legend><?= e($category['name']) ?></legend>
 	<? if ($current_user_is_admin): ?>
-	<form method="post" action=".">
+	<form method="post">
 		<input type="hidden" name="action" value="edit_category_rules">
 		<input type="hidden" name="name" value="<?= e($category['name']) ?>">
 		<p><label>rules</label><br><textarea name="rules" maxlength="4000" rows="4"><?= e($category['rules']) ?></textarea> <button type="submit">save rules</button></p>
@@ -125,7 +125,7 @@ require __DIR__ . '/../../templates/header.php';
 		properties:
 		<? foreach (json_decode($category['properties']) as $property): ?>
 		<span class="tag"><?= e($property) ?>
-			<form method="post" action="." style="display:inline;">
+			<form method="post" style="display:inline;">
 				<input type="hidden" name="action" value="remove_category_property">
 				<input type="hidden" name="category_name" value="<?= e($category['name']) ?>">
 				<input type="hidden" name="property_name" value="<?= e($property) ?>">
@@ -134,13 +134,13 @@ require __DIR__ . '/../../templates/header.php';
 		</span>
 		<? endforeach; ?>
 	</div>
-	<form method="post" action=".">
+	<form method="post">
 		<input type="hidden" name="action" value="add_category_property">
 		<input type="hidden" name="category_name" value="<?= e($category['name']) ?>">
 		<input type="text" name="property_name" maxlength="50" placeholder="property name" required>
 		<button type="submit">+ add property</button>
 	</form>
-	<form method="post" action=".">
+	<form method="post">
 		<input type="hidden" name="action" value="remove_category">
 		<input type="hidden" name="name" value="<?= e($category['name']) ?>">
 		<button type="submit">remove category</button>
@@ -149,7 +149,7 @@ require __DIR__ . '/../../templates/header.php';
 </fieldset>
 <? endforeach; ?>
 <? if ($current_user_is_admin): ?>
-<form method="post" action=".">
+<form method="post">
 	<input type="hidden" name="action" value="add_category">
 	<input type="text" name="name" maxlength="50" placeholder="category name" required>
 	<button type="submit">+ add category</button>
@@ -165,7 +165,7 @@ require __DIR__ . '/../../templates/header.php';
 <p>
 	<?= e($moderator_name) ?> - moderator
 	<? if ($current_user_is_admin): ?>
-	<form method="post" action="." style="display:inline;">
+	<form method="post" style="display:inline;">
 		<input type="hidden" name="action" value="remove_moderator">
 		<input type="hidden" name="user_name" value="<?= e($moderator_name) ?>">
 		<button type="submit">remove</button>
@@ -174,7 +174,7 @@ require __DIR__ . '/../../templates/header.php';
 </p>
 <? endforeach; ?>
 <? if ($current_user_is_admin): ?>
-<form method="post" action=".">
+<form method="post">
 	<input type="hidden" name="action" value="add_admin_or_moderator">
 	<label for="user_name">add user</label> <input type="text" id="user_name" name="user_name" maxlength="32" required>
 	role
@@ -190,13 +190,13 @@ require __DIR__ . '/../../templates/header.php';
 <p>
 	<?= e($run['user_name']) ?> &nbsp; <?= e($run['category_name']) ?> &nbsp; <?= e(format_run_time((int) $run['time_milliseconds'])) ?> &nbsp;
 	<a href="<?= e($run['proof']) ?>">link</a>
-	<form method="post" action="." style="display:inline;">
+	<form method="post" style="display:inline;">
 		<input type="hidden" name="action" value="verify_run">
 		<input type="hidden" name="run_user_name" value="<?= e($run['user_name']) ?>">
 		<input type="hidden" name="run_proof" value="<?= e($run['proof']) ?>">
 		<button type="submit">verify</button>
 	</form>
-	<form method="post" action="." style="display:inline;">
+	<form method="post" style="display:inline;">
 		<input type="hidden" name="action" value="reject_run">
 		<input type="hidden" name="run_user_name" value="<?= e($run['user_name']) ?>">
 		<input type="hidden" name="run_proof" value="<?= e($run['proof']) ?>">
@@ -210,7 +210,7 @@ require __DIR__ . '/../../templates/header.php';
 <? foreach ($rejected_runs as $run): ?>
 <p style="text-decoration:line-through;">
 	<?= e($run['user_name']) ?> &nbsp; <?= e($run['category_name']) ?> &nbsp; <?= e(format_run_time((int) $run['time_milliseconds'])) ?>
-	<form method="post" action="." style="display:inline; text-decoration:none;">
+	<form method="post" style="display:inline; text-decoration:none;">
 		<input type="hidden" name="action" value="restore_run">
 		<input type="hidden" name="run_user_name" value="<?= e($run['user_name']) ?>">
 		<input type="hidden" name="run_proof" value="<?= e($run['proof']) ?>">
@@ -225,11 +225,11 @@ require __DIR__ . '/../../templates/header.php';
 <? if ($game['image'] !== null): ?>
 <img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:100px;max-height:100px;display:block;">
 <? endif; ?>
-<form method="post" action="." enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="upload_game_image">
 	<p>game image <?= $game['image'] !== null ? '(current image set)' : '(no image set)' ?> <input type="file" name="image" accept="image/*" required> <button type="submit">upload</button></p>
 </form>
-<form method="post" action=".">
+<form method="post">
 	<input type="hidden" name="action" value="save_game_details">
 	<p><label>game-wide rules</label><br><textarea name="rules" maxlength="4000" rows="4"><?= e($game['rules']) ?></textarea></p>
 	<p><label>game details</label><br><textarea name="details" maxlength="4000" rows="8"><?= e($game['details']) ?></textarea></p>

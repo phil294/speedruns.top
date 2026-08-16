@@ -22,7 +22,7 @@ help_icon_html('accepted requests make you the permanent game admin for that gam
 <? if (isset($confirmation_message)): ?>
 <p><?= e($confirmation_message) ?></p>
 <? endif; ?>
-<form method="post" action="/game-add">
+<form method="post">
 	<p><label for="name">game name</label> <input type="text" id="name" name="name" maxlength="100" required value="<?= e($_POST['name'] ?? '') ?>"></p>
 	<p><label for="website">website/wiki</label> <input type="url" id="website" name="website" maxlength="300" required value="<?= e($_POST['website'] ?? '') ?>"></p>
 	<p><label for="description">tell us why this game should be added, and why you're the right person to be its admin on speedruns.top</label><br><textarea id="description" name="description" maxlength="4000" rows="4" required><?= e($_POST['description'] ?? '') ?></textarea></p>

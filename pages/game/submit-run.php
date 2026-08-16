@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
 
 require __DIR__ . '/../../templates/header.php';
 ?>
-<form method="post" action="/game/<?= e($game_name) ?>/submit-run">
+<form method="post">
 	<p class="radio-tabs">
 		category
 		<? foreach ($category_names as $category): ?>

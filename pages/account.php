@@ -39,7 +39,7 @@ require __DIR__ . '/../templates/header.php';
 <? if ($current_user['profile_picture'] !== null): ?>
 <img src="/user/<?= e($current_user['name']) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">
 <? endif; ?>
-<form method="post" action="/account" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="upload_profile_picture">
 	<p><?= $current_user['profile_picture'] !== null ? '(current picture set)' : '(no picture set)' ?> <input type="file" name="picture" accept="image/*" required> <button type="submit">upload</button></p>
 </form>
@@ -50,7 +50,7 @@ require __DIR__ . '/../templates/header.php';
 <p>you have already used your one-time username change.</p>
 <? else: ?>
 <p>you may change your username ONLY ONCE. choose carefully, this cannot be undone!</p>
-<form method="post" action="/account">
+<form method="post">
 	<input type="hidden" name="action" value="change_username">
 	<label for="new_username">new username</label> <input type="text" id="new_username" name="new_username" maxlength="32" required>
 	<button type="submit">change username (once, permanently)</button>

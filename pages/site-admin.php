@@ -41,12 +41,12 @@ require __DIR__ . '/../templates/header.php';
 <p>
 	<strong><?= e($game_request['name']) ?></strong> requested by <?= e($game_request['requested_by']) ?><br>
 	<?= nl2br(e($game_request['description'])) ?>
-	<form method="post" action="/site-admin" style="display:inline;">
+	<form method="post" style="display:inline;">
 		<input type="hidden" name="action" value="accept_game_request">
 		<input type="hidden" name="name" value="<?= e($game_request['name']) ?>">
 		<button type="submit">accept</button>
 	</form>
-	<form method="post" action="/site-admin" style="display:inline;">
+	<form method="post" style="display:inline;">
 		<input type="hidden" name="action" value="reject_game_request">
 		<input type="hidden" name="name" value="<?= e($game_request['name']) ?>">
 		<button type="submit">reject</button>
