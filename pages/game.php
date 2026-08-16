@@ -5,8 +5,7 @@ $games = sql(
 	"select game.name, count(run.proof) as run_count, count(category.name) as category_count
 	from game
 	left join category on category.game_name = game.name
-	left join run on run.game_name = game.name
-	where run.deleted_at is null and (run.verified = 1 or run.verified is null)
+	left join run on run.game_name = game.name and run.deleted_at is null and (run.verified = 1 or run.verified is null)
 	group by game.name
 	order by game.name"
 );
