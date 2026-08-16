@@ -1,7 +1,0 @@
-parameters:
-	# TODO: change to `max` and fix
-	level: 0
-	paths:
-		- index.php
-		- src
-		- pages
