@@ -72,10 +72,13 @@ require __DIR__ . '/../../templates/header.php';
 	<p>
 		<label for="hours">hours</label>
 		<input type="number" id="hours" name="hours" min="0" style="width:4em;" value="<?= e($_POST['hours'] ?? '0') ?>">
+		<br>
 		<label for="minutes">minutes</label>
 		<input type="number" id="minutes" name="minutes" min="0" max="59" style="width:4em;" value="<?= e($_POST['minutes'] ?? '0') ?>">
+		<br>
 		<label for="seconds">seconds</label>
 		<input type="number" id="seconds" name="seconds" min="0" max="59" style="width:4em;" value="<?= e($_POST['seconds'] ?? '0') ?>">
+		<br>
 		<label for="milliseconds">milliseconds</label>
 		<input type="number" id="milliseconds" name="milliseconds" min="0" max="999" style="width:5em;" value="<?= e($_POST['milliseconds'] ?? '0') ?>">
 	</p>
