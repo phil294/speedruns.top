@@ -16,7 +16,7 @@ require __DIR__ . '/../templates/header.php';
 
 <section id="about">
 	<p>speedruns.top is an alternative to the popular <a href="https://speedrun.com">speedrun.com</a> site. <? help_icon_html('Speedrunning is the act of playing a video game, or section of a video game, with the goal of completing it as fast as possible. <cite><a href="https://en.wikipedia.org/wiki/Speedrunning">en.wikipedia.org</a></cite>') ?></p>
-	<p>We are <a href="https://github.com/speedruns-top/speedruns.top">open source</a> and accept <em>all</em> sorts of games and categories.</p>
+	<p>We are <a href="https://github.com/phil294/speedruns.top">open source</a> and accept <em>all</em> sorts of games and categories.</p>
 	<p>Anybody can request the addition of a new game, and you can submit runs to any game. Game moderators will then review and approve them.</p>
 	<p>Feel free to contact us any time via <a href="mailto:contact@speedruns.top">contact@speedruns.top</a>.</p>
 </section>
