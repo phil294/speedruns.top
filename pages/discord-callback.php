@@ -7,8 +7,9 @@ if ($authorization_code === null) {
 	exit;
 }
 
+// TODO: what if this returns invalid data or is invoked maliciously
 $discord_user = discord_fetch_user_for_code($authorization_code);
-$user = find_or_create_user_by_discord((string) $discord_user['id'], (string) $discord_user['username']);
-log_in_as($user['name']);
+$username = find_or_create_user_by_discord((string) $discord_user['id']);
+log_in_as($username);
 header('Location: /');
 exit;

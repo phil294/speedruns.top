@@ -1,3 +1,5 @@
+/* This file is entirely llm-generated */
+
 :root {
 	--background: #f5ecd9;
 	--surface: #eee2c8;
@@ -15,7 +17,7 @@ body {
 	margin: 0;
 	background: var(--background);
 	color: var(--text);
-	font-family: Georgia, "Times New Roman", serif;
+	font-family: sans;
 	font-size: 15px;
 	line-height: 1.35;
 }
@@ -50,6 +52,30 @@ nav a:hover {
 
 nav form {
 	margin: 0;
+}
+
+a:link {
+	color: var(--accent);
+}
+
+a:visited {
+	color: #5c3714;
+}
+
+a.prominent-link {
+	display: inline-block;
+	padding: 3px 10px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 3px;
+	box-shadow: 0 2px 0 var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a.prominent-link:active {
+	box-shadow: inset 0 1px 2px var(--shadow);
+	transform: translateY(2px);
 }
 
 main {
@@ -104,6 +130,21 @@ tr.deleted td {
 	opacity: 0.6;
 }
 
+tr.rank-1 td:first-child {
+	color: #a8790a;
+	font-weight: bold;
+}
+
+tr.rank-2 td:first-child {
+	color: #6b6b6b;
+	font-weight: bold;
+}
+
+tr.rank-3 td:first-child {
+	color: #9a5a2e;
+	font-weight: bold;
+}
+
 img.avatar {
 	width: 18px;
 	height: 18px;
@@ -114,12 +155,20 @@ img.avatar {
 }
 
 .tag {
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	white-space: nowrap;
 	font-size: 11px;
 	padding: 0 4px;
 	border: 1px solid var(--border);
 	border-radius: 3px;
 	background: var(--surface);
+}
+
+.tag button {
+	font-size: 11px;
+	padding: 0 4px;
 }
 
 button,
@@ -173,10 +222,39 @@ label {
 	min-width: 130px;
 }
 
+fieldset {
+	border: 1px solid var(--border);
+	border-radius: 3px;
+	margin: 6px 0;
+	padding: 6px 10px;
+}
+
+legend {
+	padding: 0 4px;
+	font-weight: bold;
+}
+
 input[type="radio"] {
 	accent-color: var(--accent);
 	transform: scale(1.2);
 	margin-right: 4px;
+}
+
+.radio-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	align-items: center;
+}
+
+.radio-tabs label {
+	display: inline-flex;
+	align-items: center;
+	min-width: 0;
+	padding: 2px 8px;
+	border: 1px solid var(--border);
+	border-radius: 3px;
+	background: var(--surface);
 }
 
 details.help {
@@ -220,15 +298,11 @@ details.help span {
 	border-radius: 3px;
 	font-size: 13px;
 	width: max-content;
-	max-width: 260px;
+	max-width: min(460px, 60vw);
 	box-shadow: 0 2px 4px var(--shadow);
 }
 
-details.rules {
-	margin: 4px 0;
-}
-
-details.rules summary {
+summary {
 	cursor: pointer;
 }
 

@@ -14,8 +14,7 @@ function current_user(): array|null {
 		return null;
 	}
 
-	$user = sql_one(
-		'select user.* from login_session join user on user.name = login_session.user_name where login_session.token = ?',
+	$user = sql_one('select u.name, u.email, u.discord_user_id not null as is_discord, u.profile_picture, u.username_changed_at not null as username_already_changed, u.is_site_admin, u.created_at, u.last_action_at, u.last_login_link_sent_at from login_session s join user u on u.name = s.user_name where s.token = ?',
 		[$token],
 	);
 	return $user;
@@ -50,23 +49,19 @@ function log_out(): void {
 	setcookie('session', '', ['expires' => time() - 3600, 'path' => '/']);
 }
 
-function is_game_admin(string $game_url_shorthand, string $user_name): bool {
-	return sql_one(
-		'select 1 from game_admin where game_url_shorthand = ? and user_name = ?',
-		[$game_url_shorthand, $user_name],
-	) !== null;
+function is_game_admin(string $game_name, string $user_name): bool {
+	return sql_one('select 1 from game_admin where game_name = ? and user_name = ?',
+		[$game_name, $user_name]) !== null;
 }
 
-function is_game_moderator(string $game_url_shorthand, string $user_name): bool {
-	return sql_one(
-		'select 1 from game_moderator where game_url_shorthand = ? and user_name = ?',
-		[$game_url_shorthand, $user_name],
-	) !== null;
+function is_game_moderator(string $game_name, string $user_name): bool {
+	return sql_one('select 1 from game_moderator where game_name = ? and user_name = ?',
+		[$game_name, $user_name]) !== null;
 }
 
-function require_game_admin_or_moderator(string $game_url_shorthand): array {
+function require_game_admin_or_moderator(string $game_name): array {
 	$user = require_login();
-	if (!$user['is_site_admin'] && !is_game_admin($game_url_shorthand, $user['name']) && !is_game_moderator($game_url_shorthand, $user['name'])) {
+	if (!$user['is_site_admin'] && !is_game_admin($game_name, $user['name']) && !is_game_moderator($game_name, $user['name'])) {
 		http_response_code(403);
 		echo 'you are not an admin or moderator for this game.';
 		exit;

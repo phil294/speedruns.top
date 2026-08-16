@@ -24,10 +24,19 @@ function database(): PDO {
 	return $connection;
 }
 
+$log_out = fopen(__DIR__ . '/../data/queries.log', 'a');
+function log_query(string $query, float $start_time): void {
+	global $log_out;
+	fwrite($log_out, sprintf("[%.4f s] %s\n", microtime(true) - $start_time, preg_replace('/\s+/', ' ', trim($query))));
+}
+
 function sql(string $query, array $parameters = []): array {
+	$start_time = microtime(true);
 	$statement = database()->prepare($query);
 	$statement->execute($parameters);
-	return $statement->fetchAll();
+	$rows = $statement->fetchAll();
+	log_query($query, $start_time);
+	return $rows;
 }
 
 function sql_one(string $query, array $parameters = []): array|null {
@@ -35,7 +44,34 @@ function sql_one(string $query, array $parameters = []): array|null {
 	return $rows[0] ?? null;
 }
 
+function transaction(callable $callback): void {
+	$connection = database();
+	$connection->beginTransaction();
+	try {
+		$callback();
+		$connection->commit();
+	} catch (Throwable $e) {
+		$connection->rollBack();
+		throw $e;
+	}
+}
+
+// TODO: what for
 function write(string $query, array $parameters = []): void {
+	$start_time = microtime(true);
 	$statement = database()->prepare($query);
 	$statement->execute($parameters);
+	log_query($query, $start_time);
+}
+
+// TODO: why
+function write_blob(string $query, string $binary_value, array $other_parameters = []): void {
+	$start_time = microtime(true);
+	$statement = database()->prepare($query);
+	$statement->bindValue(1, $binary_value, PDO::PARAM_LOB);
+	foreach ($other_parameters as $index => $value) {
+		$statement->bindValue($index + 2, $value);
+	}
+	$statement->execute();
+	log_query($query, $start_time);
 }

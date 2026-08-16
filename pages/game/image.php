@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/** @var string $game_url_shorthand */
-
-$game = sql_one('select image from game where url_shorthand = ?', [$game_url_shorthand]);
+$game = sql_one('select image from game where name = ?', [$path_resource_id]);
 if ($game === null || $game['image'] === null) {
 	http_response_code(404);
 	exit;

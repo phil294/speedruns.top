@@ -1,8 +1,13 @@
 RewriteEngine On
+
+RewriteCond %{REQUEST_URI} !^/index\.php$
+RewriteCond %{REQUEST_URI} !^/style\.css$
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [F]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]
 
-<FilesMatch "\.(sqlite|sql)$">
-	Require all denied
-</FilesMatch>
+php_value upload_max_filesize 10M
+php_value post_max_size 10M

@@ -5,8 +5,9 @@ function e(string|int|null $value): string {
 	return htmlspecialchars((string) $value, ENT_QUOTES);
 }
 
-function help_icon(string $text): void {
-	echo '<details class="help"><summary>?</summary><span>' . e($text) . '</span></details>';
+// TODO: this works great but cant be placed inside <p> elements. must use something like button popovertarget with position-anchor instead for correct a11y. maybe this helper needs to go then.
+function help_icon_html(string $text): void {
+	echo '<details class="help"><summary>?</summary><span>' . $text . '</span></details>';
 }
 
 function format_run_time(int $time_milliseconds): string {
@@ -22,18 +23,11 @@ function format_date(string $sqlite_datetime): string {
 	return substr($sqlite_datetime, 0, 10);
 }
 
-function render_rules(string $rules_text): void {
-	if ($rules_text === '') {
-		return;
-	}
-
-	$lines = explode("\n", $rules_text);
-	$preview = implode(' ', array_slice($lines, 0, 2));
-
-	if (count($lines) <= 2 && mb_strlen($preview) <= 160) {
-		echo '<p>' . nl2br(e($rules_text)) . '</p>';
-		return;
-	}
-
-	echo '<details class="rules"><summary>' . e(mb_strimwidth($preview, 0, 160, '...')) . ' <em>vvv expand rules vvv</em></summary><p>' . nl2br(e($rules_text)) . '</p></details>';
+/** does **not** `exit` */
+function render_page_not_found(): void {
+	http_response_code(404);
+	global $breadcrumbs;
+	require __DIR__ . '/../templates/header.php';
+	echo '<p>404 not found :(</p><br><a href="/">back to main page</a>';
+	require __DIR__ . '/../templates/footer.php';
 }
