@@ -1,5 +1,5 @@
 <?
-$title = array_last($breadcrumbs)['name'] ?? null;
+$title = $breadcrumbs[array_key_last($breadcrumbs) ?? '']['name'] ?? null;
 $current_user = current_user();
 ?>
 <!doctype html>
