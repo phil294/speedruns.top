@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			exit;
 		}
 		sql('delete from game_request where name = ?', [$name]);
-		send_mail($game_request['requester_email'], 'your game request was rejected', "\"{$game_request['requested_game_name']}\" was rejected. if you think this was a mistake, please contact {SITE_ADMIN_EMAIL}.");
+		send_mail($game_request['requester_email'], 'your game request was rejected', "\"{$game_request['requested_game_name']}\" was rejected. if you think this was a mistake, please contact " . SITE_ADMIN_EMAIL . ".");
 	}
 	header('Location: /site-admin');
 	exit;

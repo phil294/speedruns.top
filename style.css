@@ -1,4 +1,4 @@
-/* This file is entirely llm-generated */
+/* This file is mostly llm-generated */
 
 :root {
 	--background: #f5ecd9;
@@ -10,10 +10,22 @@
 	--border: #b89a6b;
 	--shadow: rgba(58, 47, 34, 0.35);
 	--input-background: #fffdf6;
-}
 
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme="light"]) {
+	@media (prefers-color-scheme: dark) {
+		&:not([data-theme="light"]) {
+			--background: #1c1712;
+			--surface: #2b2319;
+			--text: #e8dcc8;
+			--accent: #e0a458;
+			--visited-accent: #c98c46;
+			--error: #f52a2a;
+			--border: #5a4a34;
+			--shadow: rgba(0, 0, 0, 0.5);
+			--input-background: #241d15;
+		}
+	}
+
+	&[data-theme="dark"] {
 		--background: #1c1712;
 		--surface: #2b2319;
 		--text: #e8dcc8;
@@ -24,18 +36,6 @@
 		--shadow: rgba(0, 0, 0, 0.5);
 		--input-background: #241d15;
 	}
-}
-
-:root[data-theme="dark"] {
-	--background: #1c1712;
-	--surface: #2b2319;
-	--text: #e8dcc8;
-	--accent: #e0a458;
-	--visited-accent: #c98c46;
-	--error: #f52a2a;
-	--border: #5a4a34;
-	--shadow: rgba(0, 0, 0, 0.5);
-	--input-background: #241d15;
 }
 
 * {
@@ -67,28 +67,28 @@ nav {
 	gap: 10px;
 	flex-wrap: nowrap;
 	overflow-x: auto;
-}
 
-nav .spacer {
-	flex: 1;
-}
+	.spacer {
+		flex: 1;
+	}
 
-nav a {
-	color: var(--accent);
-	white-space: nowrap;
-}
+	a {
+		color: var(--accent);
+		white-space: nowrap;
+	}
 
-nav form {
-	margin: 0;
+	form {
+		margin: 0;
+	}
 }
 
 .theme-link {
 	text-decoration: none;
 	font-size: 15px;
-}
 
-.theme-link.active {
-	text-decoration: underline;
+	&.active {
+		text-decoration: underline;
+	}
 }
 
 .breadcrumbs > *:last-child {
@@ -113,11 +113,11 @@ a.prominent-link {
 	box-shadow: 0 2px 0 var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 	font-weight: bold;
 	text-decoration: none;
-}
 
-a.prominent-link:active {
-	box-shadow: inset 0 1px 2px var(--shadow);
-	transform: translateY(2px);
+	&:active {
+		box-shadow: inset 0 1px 2px var(--shadow);
+		transform: translateY(2px);
+	}
 }
 
 main {
@@ -195,71 +195,74 @@ tr.deleted td {
 
 table.leaderboard tbody {
 	counter-reset: rank;
+
+	tr.verified {
+		counter-increment: rank;
+
+		td:first-child::before {
+			content: counter(rank) '.';
+		}
+
+		&:nth-child(1 of .verified) {
+			background: #f3d47e;
+			color: #4a3400;
+			font-weight: bold;
+			box-shadow: inset 4px 0 0 #a8790a;
+
+			td:first-child::before {
+				content: '🥇 ' counter(rank);
+			}
+		}
+
+		&:nth-child(2 of .verified) {
+			background: #dcdcdc;
+			color: #3a3a3a;
+			font-weight: bold;
+			box-shadow: inset 4px 0 0 #6b6b6b;
+
+			td:first-child::before {
+				content: '🥈 ' counter(rank);
+			}
+		}
+
+		&:nth-child(3 of .verified) {
+			background: #e3b48c;
+			color: #4a2a10;
+			font-weight: bold;
+			box-shadow: inset 4px 0 0 #9a5a2e;
+
+			td:first-child::before {
+				content: '🥉 ' counter(rank);
+			}
+		}
+
+		&:nth-child(-n+3) a {
+			text-decoration: underline;
+		}
+
+		&:nth-child(1) a {
+			color: #6b4400;
+		}
+
+		&:nth-child(2) a {
+			color: #444;
+		}
+
+		&:nth-child(3) a {
+			color: #5c2f10;
+		}
+	}
 }
 
-table.leaderboard tbody tr.verified {
-	counter-increment: rank;
-}
+table.runs tr {
+	&.rejected {
+		text-decoration: line-through;
+		opacity: 0.6;
+	}
 
-table.leaderboard tbody tr.verified td:first-child::before {
-	content: counter(rank) '.';
-}
-
-table.leaderboard tbody tr.verified:nth-child(1 of .verified) {
-	background: #f3d47e;
-	color: #4a3400;
-	font-weight: bold;
-	box-shadow: inset 4px 0 0 #a8790a;
-}
-
-table.leaderboard tbody tr.verified:nth-child(2 of .verified) {
-	background: #dcdcdc;
-	color: #3a3a3a;
-	font-weight: bold;
-	box-shadow: inset 4px 0 0 #6b6b6b;
-}
-
-table.leaderboard tbody tr.verified:nth-child(3 of .verified) {
-	background: #e3b48c;
-	color: #4a2a10;
-	font-weight: bold;
-	box-shadow: inset 4px 0 0 #9a5a2e;
-}
-
-table.leaderboard tbody tr.verified:nth-child(1 of .verified) td:first-child::before {
-	content: '🥇 ' counter(rank);
-}
-
-table.leaderboard tbody tr.verified:nth-child(2 of .verified) td:first-child::before {
-	content: '🥈 ' counter(rank);
-}
-
-table.leaderboard tbody tr.verified:nth-child(3 of .verified) td:first-child::before {
-	content: '🥉 ' counter(rank);
-}
-
-table.leaderboard tbody tr.verified:nth-child(-n+3) a {
-	text-decoration: underline;
-}
-
-table.leaderboard tbody tr.verified:nth-child(1) a {
-	color: #6b4400;
-}
-
-table.leaderboard tbody tr.verified:nth-child(2) a {
-	color: #444;
-}
-
-table.leaderboard tbody tr.verified:nth-child(3) a {
-	color: #5c2f10;
-}
-
-table.runs tr.rejected {
-	text-decoration: line-through;
-	opacity: 0.6;
-}
-table.runs tr.verification-pending {
-	opacity: 0.6;
+	&.verification-pending {
+		opacity: 0.6;
+	}
 }
 
 img.avatar {
@@ -282,14 +285,15 @@ img.avatar {
 	border-radius: 3px;
 	background: var(--surface);
 	color: var(--text);
-}
-.tag.rejected {
-	color: var(--error);
-}
 
-.tag button {
-	font-size: 11px;
-	padding: 0 4px;
+	&.rejected {
+		color: var(--error);
+	}
+
+	button {
+		font-size: 11px;
+		padding: 0 4px;
+	}
 }
 
 button,
@@ -304,29 +308,28 @@ input[type="submit"] {
 	box-shadow: 0 2px 0 var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 	cursor: pointer;
 	transition: box-shadow 0.05s ease, transform 0.05s ease;
-}
 
-button:active,
-input[type="submit"]:active {
-	box-shadow: inset 0 1px 2px var(--shadow);
-	transform: translateY(2px);
-}
+	&:active {
+		box-shadow: inset 0 1px 2px var(--shadow);
+		transform: translateY(2px);
+	}
 
-button:disabled,
-input[type="submit"]:disabled, fieldset:disabled button, fieldset:disabled input[type="submit"] {
-	cursor: not-allowed;
-	color: #948266;
-	background: var(--background);
-	box-shadow: none;
+	&:disabled,
+	fieldset:disabled & {
+		cursor: not-allowed;
+		color: #948266;
+		background: var(--background);
+		box-shadow: none;
+	}
 }
 
 button.secondary {
 	background: transparent;
 	box-shadow: none;
-}
 
-button.secondary:active {
-	transform: translateY(1px);
+	&:active {
+		transform: translateY(1px);
+	}
 }
 
 input[type="text"],
@@ -375,16 +378,16 @@ input[type="radio"] {
 	gap: 4px;
 	align-items: center;
 	margin: 10px 0;
-}
 
-.radio-tabs label {
-	display: inline-flex;
-	align-items: center;
-	min-width: 0;
-	padding: 2px 8px;
-	border: 1px solid var(--border);
-	border-radius: 3px;
-	background: var(--surface);
+	label {
+		display: inline-flex;
+		align-items: center;
+		min-width: 0;
+		padding: 2px 8px;
+		border: 1px solid var(--border);
+		border-radius: 3px;
+		background: var(--surface);
+	}
 }
 
 button.help {

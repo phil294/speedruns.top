@@ -24,7 +24,7 @@ function rate_limit_action(string $path): void {
 	}
 	sql('update user set last_action_at = datetime(\'now\') where name = ?', [$user['name']]);
 }
-function rate_limit_login_by_user(array $user) {
+function rate_limit_login_by_user(array $user): void {
 	if ($user['seconds_until_next_login_link'] > 0) {
 		render_rate_limit_error((int) $user['seconds_until_next_login_link']);
 		exit;
@@ -32,7 +32,7 @@ function rate_limit_login_by_user(array $user) {
 	sql('update user set last_login_link_sent_at = datetime(\'now\') where name = ?', [$user['name']]);
 }
 
-function rate_limit_login_attempts_by_ip() {
+function rate_limit_login_attempts_by_ip(): void {
 	$ip_address = get_client_ip_address();
 	$attempts_today = (int) sql_one("select count(*) as count from login_link_attempt where ip_address = ? and created_at > datetime('now', '-1 day')", [$ip_address])['count'];
 	if ($attempts_today >= MAX_LOGIN_ATTEMPTS_PER_IP_PER_DAY) {
@@ -43,7 +43,7 @@ function rate_limit_login_attempts_by_ip() {
 }
 
 /** does **not** `exit` */
-function render_rate_limit_error(int $seconds_remaining) {
+function render_rate_limit_error(int $seconds_remaining): void {
 	http_response_code(429);
 	// TODO:
 	// $page_title = 'please wait';
