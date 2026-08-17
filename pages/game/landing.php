@@ -20,14 +20,18 @@ $runs = [];
 $property_names = [];
 if ($selected_category !== null) {
 	$runs = sql(
-		"select r.user_name, r.proof, min(r.time_milliseconds) as time_milliseconds, r.comment, r.verified, r.created_at, u.profile_picture, json_group_array(rp.value order by p.name asc) as property_values
-		from run r
+		"select r.user_name, r.proof, r.time_milliseconds, r.comment, r.verified, r.created_at, u.profile_picture, json_group_array(rp.value order by p.name asc) as property_values
+		from (
+			select *, row_number() over (partition by user_name order by time_milliseconds asc) as per_user_rank
+			from run
+			where game_name = ? and category_name = ? and deleted_at is null and (verified is null or verified = 1)
+		) r
 		inner join user u on u.name = r.user_name
 		left join property p on r.game_name = p.game_name and r.category_name = p.category_name
 		left join run__property rp on r.proof = rp.run_proof and r.user_name = rp.run_user_name and p.name = rp.property_name
-		where r.game_name = ? and r.category_name = ? and r.deleted_at is null and (r.verified is null or r.verified = 1)
-		group by r.user_name" . ($show_all_runs_per_user ? ', r.proof' : '') . "
-		order by time_milliseconds asc",
+		" . ($show_all_runs_per_user ? "" : "where r.per_user_rank = 1") . "
+		group by r.user_name, r.proof
+		order by r.time_milliseconds asc",
 		[$game_name, $selected_category_name]);
 
 	$property_names = array_column(sql('select name from property where game_name = ? and category_name = ? order by name asc', [$game_name, $selected_category_name]), 'name');
