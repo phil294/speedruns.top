@@ -29,8 +29,7 @@ $theme_preference = $_COOKIE['theme'] ?? null;
 			<a href="/set-theme?value=light" class="theme-link<?= $theme_preference === 'light' ? ' active' : '' ?>" title="light theme">☀</a>
 			<a href="/set-theme?value=dark" class="theme-link<?= $theme_preference === 'dark' ? ' active' : '' ?>" title="dark theme">🌙</a>
 			<? if ($current_user !== null): ?>
-			<a href="/user/<?= e($current_user['name']) ?>"><?= e($current_user['name']) ?></a>
-			<a href="/account">account</a>
+			<a href="/account"><?= e($current_user['name']) ?></a>
 			<? if ($current_user['is_site_admin']): ?>
 			<a href="/site-admin">site admin</a>
 			<? endif; ?>
@@ -46,5 +45,5 @@ $theme_preference = $_COOKIE['theme'] ?? null;
 		<h2><?= e($title) ?></h2>
 		<? endif; ?>
 		<? if (isset($error_message)): ?>
-		<p style="color:darkred; font-weight:bold;"><?= e($error_message) ?></p>
+		<p class="error"><?= e($error_message) ?></p>
 		<? endif; ?>

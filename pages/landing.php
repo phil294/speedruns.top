@@ -9,6 +9,7 @@ $recent_runs = sql(
 	order by run.created_at desc
 	limit 10",
 );
+$game_count = sql_one('select count(*) as count from game')['count'] ?? 0;
 
 
 require __DIR__ . '/../templates/header.php';
@@ -24,7 +25,7 @@ require __DIR__ . '/../templates/header.php';
 <hr>
 
 <h3>list of games</h3>
-<a href="/game">go to list of games</a>
+<a href="/game">click here to list all <strong><?= $game_count ?></strong> games</a>
 
 
 <h3>recent runs</h3>

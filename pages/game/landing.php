@@ -82,7 +82,7 @@ require __DIR__ . '/../../templates/header.php';
 		<?= $show_all_runs_per_user ? 'show only best run per player' : 'show all runs per player' ?>
 	</a>
 </p>
-<table class="leaderboard">
+<table class="leaderboard runs">
 	<thead>
 		<tr>
 			<th>#</th>
@@ -97,8 +97,9 @@ require __DIR__ . '/../../templates/header.php';
 		</tr>
 	</thead>
 	<tbody>
-		<? foreach ($runs as $run): ?>
-		<tr class="<?= $run['verified'] ? 'verified' : '' ?>">
+		<? foreach ($runs as $run):
+		$verified_str = $run['verified'] === null ? 'verification-pending' : ($run['verified'] === 1 ? 'verified' : 'rejected'); ?>
+		<tr class="<?= $verified_str ?>">
 			<td></td>
 			<td><?= e(format_run_time((int) $run['time_milliseconds'])) ?></td>
 			<td>
@@ -112,7 +113,7 @@ require __DIR__ . '/../../templates/header.php';
 			<? endforeach; ?>
 			<td><?= e(format_date($run['created_at'])) ?></td>
 			<td><a href="<?= e($run['proof']) ?>">link</a></td>
-			<td><?= $run['verified'] === null ? '<span class="tag">unverified</span>' : '' ?></td>
+			<td><span class="tag <?= $verified_str ?>"><?= $verified_str ?></span></td>
 		</tr>
 		<? endforeach; ?>
 	</tbody>
