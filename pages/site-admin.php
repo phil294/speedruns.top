@@ -12,21 +12,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$action = (string) ($_POST['action'] ?? '');
 	$name = (string) ($_POST['name'] ?? '');
 
+	$game_request = sql_one('select r.requested_by as requester_user_name, u.email as requester_email, r.website as request_website, r.name as requested_game_name from game_request r inner join user u on r.requested_by = u.name where r.name = ?', [$name]);
 	if ($action === 'accept_game_request') {
-		$request = sql_one('select r.requested_by as requester_user_name, u.email as requester_email, r.website as request_website, r.name as request_name from game_request r inner join user u on r.requested_by = u.name where r.name = ?', [$name]);
-		if($request === null) {
+		if($game_request === null) {
+			// TODO: helper
 			http_response_code(400);
 			echo 'no such game request';
 			exit;
 		}
-		transaction(function () use ($request) {
-			sql('insert into game (name, website) values (?, ?)', [$request['request_name'], $request['request_website']]);
-			sql('insert into game_admin (game_name, user_name) values (?, ?)', [$request['request_name'], $request['requester_user_name']]);
-			sql('delete from game_request where name = ?', [$request['request_name']]);
+		transaction(function () use ($game_request) {
+			sql('insert into game (name, website) values (?, ?)', [$game_request['requested_game_name'], $game_request['request_website']]);
+			sql('insert into game_admin (game_name, user_name) values (?, ?)', [$game_request['requested_game_name'], $game_request['requester_user_name']]);
+			sql('delete from game_request where name = ?', [$game_request['requested_game_name']]);
 		});
-		send_mail($request['requester_email'], 'your game request was accepted', "\"{$request['request_name']}\" is now live on speedruns.top, and you are its game admin.");
+		send_mail($game_request['requester_email'], 'your game request was accepted', "\"{$game_request['requested_game_name']}\" is now live on speedruns.top, and you are its game admin.");
 	} elseif ($action === 'reject_game_request') {
+		if($game_request === null) {
+			http_response_code(400);
+			echo 'no such game request';
+			exit;
+		}
 		sql('delete from game_request where name = ?', [$name]);
+		send_mail($game_request['requester_email'], 'your game request was rejected', "\"{$game_request['requested_game_name']}\" was rejected. if you think this was a mistake, please contact {SITE_ADMIN_EMAIL}.");
 	}
 	header('Location: /site-admin');
 	exit;

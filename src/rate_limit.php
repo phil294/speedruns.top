@@ -50,7 +50,7 @@ function render_rate_limit_error(int $seconds_remaining) {
 	global $breadcrumbs;
 	require __DIR__ . '/../templates/header.php';
 	?>
-	<p>error: please wait <?= $seconds_remaining ?> more seconds before doing that. if you think this is an error, please contact admin@speedruns.top</p>
+	<p>error: please wait <?= $seconds_remaining ?> more seconds before doing that. if you think this is an error, please contact <a href="mailto:<?= SITE_ADMIN_EMAIL ?>"><?= SITE_ADMIN_EMAIL ?></a></p>
 	<form method="post">
 		<? render_as_hidden_inputs($_POST); ?>
 		<button type="submit">try again</button>
