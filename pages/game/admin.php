@@ -67,10 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			'update run set verified = 1, verified_by = ? where user_name = ? and proof = ? and game_name = ?',
 			[$current_user['name'], $run_user_name, (string) ($_POST['run_proof'] ?? ''), $game_name],
 		);
+		send_mail(
+			(string) sql_one('select email from user where name = ?', [$run_user_name])['email'],
+			"your run for $game_name has been verified",
+			"your run for $game_name has been verified by {$current_user['name']}. congratulations! you can find it at " . BASE_URL . "/game/$game_name.",
+		);
 	} elseif ($action === 'reject_run') {
 		sql(
 			'update run set verified = 0 where user_name = ? and proof = ? and game_name = ?',
 			[(string) ($_POST['run_user_name'] ?? ''), (string) ($_POST['run_proof'] ?? ''), $game_name],
+		);
+		send_mail(
+			(string) sql_one('select email from user where name = ?', [$_POST['run_user_name']])['email'],
+			"your run for $game_name has been rejected",
+			"your run for $game_name has been rejected by {$current_user['name']}. if you think this was a mistake, please contact the game admins or moderators.",
 		);
 	} elseif ($action === 'restore_run') {
 		sql(
@@ -101,7 +111,7 @@ $game_admin_user_names = array_column(sql('select user_name from game_admin wher
 $game_moderator_user_names = array_column(sql('select user_name from game_moderator where game_name = ? order by user_name', [$game_name]), 'user_name');
 
 $pending_runs = sql(
-	'select user_name, category_name, time_milliseconds, proof from run where game_name = ? and verified is null and deleted_at is null order by created_at',
+	'select user_name, category_name, time_milliseconds, proof, created_at from run where game_name = ? and verified is null and deleted_at is null order by created_at',
 	[$game_name],
 );
 $rejected_runs = sql(
@@ -188,7 +198,7 @@ require __DIR__ . '/../../templates/header.php';
 <h3>pending runs (<?= count($pending_runs) ?>) <? help_icon_html('game admins and moderators can verify runs. game admins may even verify their own runs, but moderators may not.'); ?></h3>
 <? foreach ($pending_runs as $run): ?>
 <p>
-	<?= e($run['user_name']) ?> &nbsp; <?= e($run['category_name']) ?> &nbsp; <?= e(format_run_time((int) $run['time_milliseconds'])) ?> &nbsp;
+	<?= e(format_date($run['created_at'])) ?> &nbsp; <?= e($run['user_name']) ?> &nbsp; <?= e($run['category_name']) ?> &nbsp; <?= e(format_run_time((int) $run['time_milliseconds'])) ?> &nbsp;
 	<a href="<?= e($run['proof']) ?>">link</a>
 	<form method="post" style="display:inline;">
 		<input type="hidden" name="action" value="verify_run">
