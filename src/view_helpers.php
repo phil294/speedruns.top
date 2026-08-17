@@ -44,3 +44,24 @@ function render_page_not_found(): void {
 	echo '<p>404 not found :(</p><br><a href="/">back to main page</a>';
 	require __DIR__ . '/../templates/footer.php';
 }
+
+function markdown(string $text): string {
+	$text = e($text);
+	$text = preg_replace_callback('/\[(.+?)\]\((.+?)\)/', function ($m) {
+        $url = str_replace('"', '%22', $m[2]);
+        if (!preg_match('/^(https?:\/\/|\/|#)/i', $url)) {
+            return $m[1]; // no javascript: etc
+        }
+		return "<a href=\"{$url}\">{$m[1]}</a>";
+    }, $text);
+	$text = preg_replace('/^#{1,6}\s+(.+)$/m', '<h3>$1</h3>', $text);
+    $text = preg_replace('/\*\*(?=\S)(.+?)(?<=\S)\*\*/s', '<strong>$1</strong>', $text);
+    $text = preg_replace('/(?<!\*)\*(?=\S)(.+?)(?<=\S)\*(?!\*)/s', '<em>$1</em>', $text);
+	$text = preg_replace('/^[*-]\s+(.+)$/m', '<li>$1</li>', $text);
+	$text = preg_replace('/((?:^<li>.*<\/li>\s*)+)/m', "<ul>\n$1</ul>", $text);
+
+	$text = nl2br($text);
+	$blocks = '(?:ul|ol|li|h[1-6])';
+	$text = preg_replace('/<br\s*\/?>\s*(<\/?'.$blocks. ')/i', '$1', $text);
+	return $text;
+}

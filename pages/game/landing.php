@@ -65,13 +65,13 @@ require __DIR__ . '/../../templates/header.php';
 
 		<details>
 			<summary>game rules</summary>
-			<?= nl2br(e($game['rules'])) ?>
+			<?= markdown(e($game['rules'])) ?>
 		</details>
 
 		<? if ($selected_category !== null): ?>
 		<details>
 			<summary>category rules</summary>
-			<?= nl2br(e($selected_category['rules'])) ?>
+			<?= markdown(e($selected_category['rules'])) ?>
 		</details>
 		<? endif; ?>
 	</div>

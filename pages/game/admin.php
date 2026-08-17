@@ -121,6 +121,24 @@ $rejected_runs = sql(
 
 require __DIR__ . '/../../templates/header.php';
 ?>
+<? if ($current_user_is_admin): ?>
+<h3>game details</h3>
+<? if ($game['image'] !== null): ?>
+<img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:100px;max-height:100px;display:block;">
+<? endif; ?>
+<form method="post" enctype="multipart/form-data">
+	<input type="hidden" name="action" value="upload_game_image">
+	<p>game image <?= $game['image'] !== null ? '(current image set)' : '(no image set)' ?> <input type="file" name="image" accept="image/*" required> <button type="submit">upload</button></p>
+</form>
+<form method="post">
+	<input type="hidden" name="action" value="save_game_details">
+	<p><label>game details (optional)</label><br><textarea name="details" maxlength="4000" rows="4"><?= e($game['details']) ?></textarea></p>
+	<p><label>game-wide rules (text/markdown)</label><br><textarea name="rules" maxlength="4000" rows="8"><?= e($game['rules']) ?></textarea></p>
+	<button type="submit">save details</button>
+</form>
+<hr>
+<? endif; ?>
+
 <h3>categories (<?= count($categories) ?> / 20) <? help_icon_html('a game needs between 1 and 20 categories. example categories: any%, 100% glitchless, level 1-10. each category gets its own leaderboard. categories\' properties are optional and meant for informative values such as chosen character class. properties are required to be filled in when submitting a run.'); ?></h3>
 <? foreach ($categories as $category): ?>
 <fieldset>
@@ -129,7 +147,7 @@ require __DIR__ . '/../../templates/header.php';
 	<form method="post">
 		<input type="hidden" name="action" value="edit_category_rules">
 		<input type="hidden" name="name" value="<?= e($category['name']) ?>">
-		<p><label>rules</label><br><textarea name="rules" maxlength="4000" rows="4"><?= e($category['rules']) ?></textarea> <button type="submit">save rules</button></p>
+		<p><label>rules (text/markdown)</label><br><textarea name="rules" maxlength="4000" rows="8"><?= e($category['rules']) ?></textarea> <button type="submit">save rules</button></p>
 	</form>
 	<div>
 		properties:
@@ -192,6 +210,7 @@ require __DIR__ . '/../../templates/header.php';
 	<label><input type="radio" name="role" value="admin"> admin</label>
 	<button type="submit">add</button>
 </form>
+<p>if you're missing a feature or have any other problems, please contact us via <a href="mailto:<?= SITE_ADMIN_EMAIL ?>"><?= SITE_ADMIN_EMAIL ?></a></p>
 <? endif; ?>
 
 <hr>
@@ -229,24 +248,5 @@ require __DIR__ . '/../../templates/header.php';
 </p>
 <? endforeach; ?>
 
-<? if ($current_user_is_admin): ?>
-<hr>
-<h3>game details</h3>
-<? if ($game['image'] !== null): ?>
-<img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:100px;max-height:100px;display:block;">
-<? endif; ?>
-<form method="post" enctype="multipart/form-data">
-	<input type="hidden" name="action" value="upload_game_image">
-	<p>game image <?= $game['image'] !== null ? '(current image set)' : '(no image set)' ?> <input type="file" name="image" accept="image/*" required> <button type="submit">upload</button></p>
-</form>
-<form method="post">
-	<input type="hidden" name="action" value="save_game_details">
-	<p><label>game-wide rules</label><br><textarea name="rules" maxlength="4000" rows="4"><?= e($game['rules']) ?></textarea></p>
-	<p><label>game details</label><br><textarea name="details" maxlength="4000" rows="8"><?= e($game['details']) ?></textarea></p>
-	<button type="submit">save details</button>
-</form>
-
-<p>if you're missing a feature or have any other problems, please contact us via <a href="mailto:<?= SITE_ADMIN_EMAIL ?>"><?= SITE_ADMIN_EMAIL ?></a></p>
-<? endif; ?>
 <?
 require __DIR__ . '/../../templates/footer.php';
