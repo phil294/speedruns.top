@@ -13,19 +13,17 @@
 
 	@media (prefers-color-scheme: dark) {
 		&:not([data-theme="light"]) {
-			--background: #1c1712;
-			--surface: #2b2319;
-			--text: #e8dcc8;
-			--accent: #e0a458;
-			--visited-accent: #c98c46;
-			--error: #f52a2a;
-			--border: #5a4a34;
-			--shadow: rgba(0, 0, 0, 0.5);
-			--input-background: #241d15;
+			--is-dark-theme: 1;
 		}
 	}
-
 	&[data-theme="dark"] {
+		--is-dark-theme: 1;
+	}
+}
+
+/* body is a descendant of html (:root) */
+@container style(--is-dark-theme: 1) {
+	body {
 		--background: #1c1712;
 		--surface: #2b2319;
 		--text: #e8dcc8;
