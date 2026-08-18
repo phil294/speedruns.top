@@ -79,7 +79,7 @@ require __DIR__ . '/../../templates/header.php';
 	<? foreach ($properties as $property): ?>
 	<p><label><?= e($property['name']) ?></label> <input type="text" name="property[<?= e($property['name']) ?>]" maxlength="200" required value="<?= e($_POST['property'][$property['name']] ?? '') ?>"></p>
 	<? endforeach; ?>
-	<p><label for="proof">proof</label> <input type="url" id="proof" name="proof" maxlength="500" required value="<?= e($_POST['proof'] ?? '') ?>"> <? help_icon_html('link to a youtube video, twitch stream, or however else your run can be verified.'); ?></p>
+	<p><label for="proof">proof</label> <input type="url" id="proof" name="proof" maxlength="500" minlength="6" required value="<?= e($_POST['proof'] ?? '') ?>"> <? help_icon_html('link to a youtube video, twitch stream, or however else your run can be verified.'); ?></p>
 	<p><label for="comment">comment</label> <input type="text" id="comment" name="comment" maxlength="300" value="<?= e($_POST['comment'] ?? '') ?>"></p>
 	<button type="submit" name="action" value="submit_run" <?= $category_names === [] ? 'disabled' : '' ?>>submit run</button>
 </form>

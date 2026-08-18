@@ -4,8 +4,8 @@ pragma foreign_keys = on;
 pragma temp_store = memory;
 
 create table user (
-	name text not null primary key check (length(name) <= 32),
-	email text null unique check (length(email) <= 254),
+	name text not null primary key check (length(name) <= 32 and length(name) >= 3),
+	email text null unique check (length(email) <= 254 and length(email) >= 6),
 	discord_user_id text null unique,
 	profile_picture blob null,
 	username_changed_at text null,
@@ -23,7 +23,7 @@ create table login_session (
 
 create table login_link (
 	token text not null primary key,
-	email text not null check (length(email) <= 254),
+	email text not null check (length(email) <= 254 and length(email) >= 5),
 	created_at text not null default (datetime('now')),
 	used_at text null
 ) strict, without rowid;
@@ -41,8 +41,8 @@ create table login_link_attempt (
 ) strict;
 
 create table game (
-	name text not null primary key check (length(name) <= 50),
-	website text not null check (length(website) <= 300),
+	name text not null primary key check (length(name) <= 50 and length(name) >= 3),
+	website text not null check (length(website) <= 300 and length(website) >= 6),
 	details text not null default '' check (length(details) <= 4000),
 	rules text not null default '' check (length(rules) <= 4000),
 	image blob null,
@@ -50,9 +50,9 @@ create table game (
 ) strict, without rowid;
 
 create table game_request (
-	name text primary key check (length(name) <= 50),
-	website text null check (length(website) <= 300),
-	description text not null check (length(description) <= 4000),
+	name text primary key check (length(name) <= 50 and length(name) >= 3),
+	website text null check (length(website) <= 300 and length(website) >= 6),
+	description text not null check (length(description) <= 4000 and length(description) >= 1),
 	requested_by text not null references user (name) on update cascade on delete cascade,
 	created_at text not null default (datetime('now'))
 ) strict, without rowid;
@@ -73,7 +73,7 @@ create table game_moderator (
 
 create table category (
 	game_name text not null references game (name) on update cascade on delete cascade,
-	name text not null check (length(name) <= 50),
+	name text not null check (length(name) <= 50 and length(name) >= 3),
 	rules text not null default '' check (length(rules) <= 4000),
 	primary key (game_name, name)
 ) strict, without rowid;
@@ -81,14 +81,14 @@ create table category (
 create table property (
 	game_name text not null references game (name) on update cascade on delete cascade,
 	category_name text not null,
-	name text not null check (length(name) <= 50),
+	name text not null check (length(name) <= 50 and length(name) >= 1),
 	primary key (game_name, category_name, name),
 	foreign key (game_name, category_name) references category (game_name, name) on update cascade on delete cascade
 ) strict, without rowid;
 
 create table run (
 	user_name text not null references user (name) on update cascade on delete cascade,
-	proof text not null check (length(proof) <= 500),
+	proof text not null check (length(proof) <= 500 and length(proof) >= 6),
 	game_name text not null references game (name) on update cascade on delete restrict,
 	category_name text not null,
 	time_milliseconds integer not null check (time_milliseconds > 0),
@@ -107,7 +107,7 @@ create table run__property (
 	game_name text not null,
 	category_name text not null,
 	property_name text not null,
-	value text not null check (length(value) <= 200),
+	value text not null check (length(value) <= 200 and length(value) >= 1),
 	primary key (run_user_name, run_proof, property_name),
 	foreign key (run_user_name, run_proof) references run (user_name, proof) on update cascade on delete cascade,
 	foreign key (game_name, category_name, property_name) references property (game_name, category_name, name) on update cascade on delete restrict

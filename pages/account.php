@@ -49,7 +49,7 @@ require __DIR__ . '/../templates/header.php';
 <p>you may change your username ONLY ONCE. choose carefully, this cannot be undone!</p>
 <form method="post">
 	<input type="hidden" name="action" value="change_username">
-	<label for="new_username">new username</label> <input type="text" id="new_username" name="new_username" maxlength="32" required>
+	<label for="new_username">new username</label> <input type="text" id="new_username" name="new_username" maxlength="32" required minlength="3">
 	<button type="submit">change username (once, permanently)</button>
 </form>
 <? endif; ?>

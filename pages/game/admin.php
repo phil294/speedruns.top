@@ -147,7 +147,7 @@ require __DIR__ . '/../../templates/header.php';
 	<form method="post">
 		<input type="hidden" name="action" value="add_category_property">
 		<input type="hidden" name="category_name" value="<?= e($category['name']) ?>">
-		<input type="text" name="property_name" maxlength="50" placeholder="property name" required>
+		<input type="text" name="property_name" maxlength="50" placeholder="property name" required minlength="1">
 		<button type="submit">+ add property</button>
 	</form>
 	<form method="post">
@@ -161,7 +161,7 @@ require __DIR__ . '/../../templates/header.php';
 <? if ($current_user_is_admin): ?>
 <form method="post">
 	<input type="hidden" name="action" value="add_category">
-	<input type="text" name="name" maxlength="50" placeholder="category name" required>
+	<input type="text" name="name" maxlength="50" placeholder="category name" required minlength="3">
 	<button type="submit">+ add category</button>
 </form>
 <? endif; ?>

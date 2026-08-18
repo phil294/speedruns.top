@@ -45,7 +45,7 @@ require __DIR__ . '/../templates/header.php';
 <? endif; ?>
 <form method="post">
 	<label for="email">email</label>
-	<input type="email" id="email" name="email" maxlength="254" required>
+	<input type="email" id="email" name="email" maxlength="254" required minlength="6">
 	<? /* honeypot */ ?>
 	<input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;">
 	<button type="submit">send login link</button>
