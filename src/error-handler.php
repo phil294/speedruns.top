@@ -6,27 +6,23 @@ declare(strict_types=1);
  * https://www.php.net/manual/en/function.set-error-handler.php#112291
  */
 
-function log_error(int $errno, string $errstr, string $errfile, int $errline): never {
+function log_error(int $errno, string $errstr, string $errfile, int $errline) {
+    if (!(error_reporting() & $errno)) {
+        return false; // @-suppressed errors
+    }
 	log_exception(new ErrorException($errstr, 0, $errno, $errfile, $errline));
 }
 function log_exception(Throwable $e): never {
-	if (DEBUG) {
+	$message = "Type: " . get_class($e) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}";
+	log_line('error', "ex: {$message}");
+	header('HTTP/1.1 500 Internal Server Error');
+	if (DEBUG_PRINT_ERROR_MESSAGES) {
 		?><pre><?
 		echo get_class($e) . "\n{$e->getMessage()}\nFile: {$e->getFile()}\nLine: {$e->getLine()}\n\n";
 		echo $e->getTraceAsString();
 		// var_dump($e);
 	} else {
-		$logfile = __DIR__ . '/../data/error.log';
-		try {
-			$user_name = current_user()['name'] ?? 'not logged in';
-		} catch (Throwable) {
-			$user_name = '???';
-		}
-		$message = "Type: " . get_class($e) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}; Request: {$_SERVER['REQUEST_METHOD']} {$_SERVER['REQUEST_URI']}; User: {$user_name}";
-		file_put_contents($logfile, $message . PHP_EOL, FILE_APPEND);
-		notify_site_admin('error on speedruns.top', $message);
-		header('HTTP/1.1 500 Internal Server Error');
-		echo 'Internal server error :( Admins have been notified. Please try again later.';
+		echo 'internal server error :( admins have been notified. please try again later.';
 	}
 	exit;
 }

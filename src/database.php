@@ -24,10 +24,8 @@ function database(): PDO {
 	return $connection;
 }
 
-$log_out = fopen(__DIR__ . '/../data/queries.log', 'a');
 function log_query(string $query, float $start_time): void {
-	global $log_out;
-	fwrite($log_out, sprintf("[%.4f s] %s\n", microtime(true) - $start_time, preg_replace('/\s+/', ' ', trim($query))));
+	log_line('debug', sprintf("query: [%.4f s] %s", microtime(true) - $start_time, preg_replace('/\s+/', ' ', trim($query))));
 }
 
 function sql(string $query, array $parameters = []): array|null {
