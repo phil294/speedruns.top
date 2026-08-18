@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 function database(): PDO {
 	static $connection = null;
-	if ($connection !== null) {
+	if ($connection !== null)
 		return $connection;
-	}
 
 	$database_path = __DIR__ . '/../data/speedruns.sqlite';
 	$database_already_exists = is_file($database_path);
@@ -17,9 +16,8 @@ function database(): PDO {
 	$connection->exec('pragma journal_mode = wal');
 	$connection->exec('pragma synchronous = normal');
 
-	if (!$database_already_exists) {
+	if (!$database_already_exists)
 		$connection->exec((string) file_get_contents(__DIR__ . '/../schema.sql'));
-	}
 
 	return $connection;
 }

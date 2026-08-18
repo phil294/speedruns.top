@@ -36,9 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			from user u where email = ?",
 			[MIN_SECONDS_BETWEEN_LOGIN_LINK_REQUESTS, $email],
 		);
-		if ($existing_user !== null) {
+		if ($existing_user !== null)
 			rate_limit_login_by_user($existing_user);
-		}
 		$token = bin2hex(random_bytes(32));
 		sql('insert into login_link (token, email) values (?, ?)', [$token, $email]);
 		send_mail($email, 'your speedruns.top login link', 'click to log in: ' . BASE_URL . '/login?token=' . $token . "\n\nif you didn't request this login, please ignore this email.");

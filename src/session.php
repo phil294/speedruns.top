@@ -4,15 +4,13 @@ declare(strict_types=1);
 function current_user(): array|null {
 	static $user = null;
 	static $looked_up = false;
-	if ($looked_up) {
+	if ($looked_up)
 		return $user;
-	}
 	$looked_up = true;
 
 	$token = $_COOKIE['session'] ?? null;
-	if ($token === null) {
+	if ($token === null)
 		return null;
-	}
 
 	$user = sql_one(
 		"select u.name, u.email, u.discord_user_id not null as is_discord, u.profile_picture, u.username_changed_at not null as username_already_changed, u.is_site_admin, u.created_at,
@@ -46,9 +44,8 @@ function log_in_as(string $user_name): void {
 
 function log_out(): void {
 	$token = $_COOKIE['session'] ?? null;
-	if ($token !== null) {
+	if ($token !== null)
 		sql('delete from login_session where token = ?', [$token]);
-	}
 	setcookie('session', '', ['expires' => time() - 3600, 'path' => '/']);
 }
 

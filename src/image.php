@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 function scale_image_to_max_dimension(string $binary_image_data, int $max_dimension): string {
 	$source_image = imagecreatefromstring($binary_image_data);
-	if ($source_image === false) {
+	if ($source_image === false)
 		throw new InvalidArgumentException('uploaded file is not a valid image');
-	}
 	imagepalettetotruecolor($source_image);
 	imagealphablending($source_image, false);
 	imagesavealpha($source_image, true);

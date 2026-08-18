@@ -11,13 +11,11 @@ function get_client_ip_address(): string {
 }
 
 function rate_limit_action(string $path): void {
-	if($path === '/logout') {
+	if ($path === '/logout')
 		return;
-	}
 	$user = current_user();
-	if ($user === null) {
+	if ($user === null)
 		return;
-	}
 	if (!$user['is_site_admin'] && $user['seconds_until_next_action'] > 0) {
 		render_rate_limit_error((int) $user['seconds_until_next_action']);
 		exit;

@@ -12,9 +12,8 @@ function log_line(string $severity, string $message): void {
 	}
 	$line = sprintf("[%s] %s %s[%s] %s\n", date('Y-m-d H:i:s'), strtoupper($severity), $_uniq_req_id, $user_name, $message);
 	fwrite($_log_out, $line);
-	if ($severity === 'error') {
+	if ($severity === 'error')
 		notify_site_admin('error on '.BASE_URL, $message);
-	}
 }
 require __DIR__ . '/src/error-handler.php';
 require __DIR__ . '/src/bootstrap.php';
@@ -25,13 +24,11 @@ $postdata = file_get_contents('php://input'); // this site doesn't use passwords
 log_line('info', sprintf("req: %s %s; %s/%s; %s - %s", @$_SERVER['REQUEST_METHOD'], @$_SERVER['REQUEST_URI'], @$_SERVER['REMOTE_ADDR'], @$_SERVER['HTTP_X_FORWARDED_FOR'], @$_SERVER['HTTP_USER_AGENT'], $postdata));
 
 $request_path = (string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if ($request_path !== '/') {
+if ($request_path !== '/')
 	$request_path = rtrim($request_path, '/');
-}
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
 	rate_limit_action($request_path);
-}
 
 /** @var string|null $path_resource_id */
 $path_resource_id = null;
@@ -40,9 +37,8 @@ if (preg_match('#^/([^/]+)/([^/]+)(/([^/]+))?$#', $request_path, $match)) {
 	$breadcrumbs = [
 		["name" => $match[1], "url" => "/{$match[1]}"],
 		["name" => $path_resource_id, "url" => "/{$match[1]}/{$match[2]}"]];
-	if($match[3] ?? null) {
+	if ($match[3] ?? null)
 		$breadcrumbs[] =["name" => $match[4], "url" => "/{$match[1]}/{$match[2]}{$match[3]}"];
-	}
 	$request_path = "/{$match[1]}" . ($match[3] ?? '/landing');
 } elseif ($request_path === '/') {
 	$request_path = '/landing';

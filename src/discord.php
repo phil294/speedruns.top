@@ -18,9 +18,8 @@ function discord_fetch_user_for_code(string $authorization_code): array {
 		'code' => $authorization_code,
 		'redirect_uri' => DISCORD_REDIRECT_URI,
 	]);
-	if (!isset($token_response['access_token'])) {
+	if (!isset($token_response['access_token']))
 		throw new RuntimeException('discord token request failed: ' . json_encode($token_response));
-	}
 
 	$curl_handle = curl_init('https://discord.com/api/users/@me');
 	curl_setopt_array($curl_handle, [

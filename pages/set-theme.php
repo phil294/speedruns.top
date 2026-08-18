@@ -18,9 +18,8 @@ setcookie('theme', $theme, [
 $redirect_to = '/';
 if (isset($_SERVER['HTTP_REFERER'])) {
 	$referer_path = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
-	if ($referer_path !== null && $referer_path !== false) {
+	if ($referer_path !== null && $referer_path !== false)
 		$redirect_to = $referer_path . (($referer_query = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY)) !== null ? '?' . $referer_query : '');
-	}
 }
 header('Location: ' . $redirect_to);
 exit;

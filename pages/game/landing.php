@@ -10,9 +10,8 @@ if ($game === null) {
 $categories = sql('select name, rules from category where game_name = ?', [$game_name]);
 $selected_category_name = $_GET['category'] ?? $categories[0]['name'] ?? null;
 $selected_category = $selected_category_name !== null ? array_filter($categories, fn($c) => $c['name'] === $selected_category_name)[0] ?? null : null;
-if($selected_category === null) {
+if ($selected_category === null)
 	$selected_category_name = null;
-}
 
 $show_all_runs_per_user = ($_GET['showruns'] ?? '') === 'all';
 
