@@ -10,7 +10,7 @@ require __DIR__ . '/../templates/header.php';
 	<tr>
 		<td>
 			<? if ($user['profile_picture'] !== null): ?>
-			<img src="/user/<?= e($user['name']) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">
+			<img src="/user/<?= e($user['name']) ?>/picture" alt="profile picture" style="max-width:100px;max-height:100px;display:block;">
 			<? endif; ?>
 		</td>
 		<td><a href="/user/<?= e($user['name']) ?>"><?= e($user['name']) ?></a></td>

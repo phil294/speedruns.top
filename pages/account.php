@@ -37,7 +37,7 @@ require __DIR__ . '/../templates/header.php';
 <hr>
 <h3>profile picture</h3>
 <? if ($current_user['profile_picture'] !== null): ?>
-<img src="/user/<?= e($current_user['name']) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">
+<img src="/user/<?= e($current_user['name']) ?>/picture" alt="profile picture" style="max-width:100px;max-height:100px;display:block;">
 <? endif; ?>
 <form method="post" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="upload_profile_picture">

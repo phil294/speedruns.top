@@ -76,7 +76,7 @@ require __DIR__ . '/../../templates/header.php';
 		<? endif; ?>
 	</div>
 	<? if ($game['image'] !== null): ?>
-	<img src="/game/<?= e($game_name) ?>/image" alt="" class="game-image">
+	<img src="/game/<?= e($game_name) ?>/image" alt="game logo" class="game-image">
 	<? endif; ?>
 </div>
 
@@ -108,7 +108,7 @@ require __DIR__ . '/../../templates/header.php';
 			<td><?= e(format_run_time((int) $run['time_milliseconds'])) ?></td>
 			<td>
 				<? if ($run['profile_picture'] !== null): ?>
-				<img class="avatar" src="/user/<?= e($run['user_name']) ?>/picture" alt="">
+				<img class="avatar" src="/user/<?= e($run['user_name']) ?>/picture" alt="profile picture">
 				<? endif; ?>
 				<a href="/user/<?= e($run['user_name']) ?>"><?= e($run['user_name']) ?></a>
 			</td>

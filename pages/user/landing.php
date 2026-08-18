@@ -23,7 +23,7 @@ $submissions = sql(
 require __DIR__ . '/../../templates/header.php';
 ?>
 <? if ($user['profile_picture'] !== null): ?>
-<img src="/user/<?= e($user_name) ?>/picture" alt="" style="max-width:100px;max-height:100px;display:block;">
+<img src="/user/<?= e($user_name) ?>/picture" alt="profile picture" style="max-width:100px;max-height:100px;display:block;">
 <? endif; ?>
 <p>member since <?= e(format_date($user['created_at'])) ?></p>
 

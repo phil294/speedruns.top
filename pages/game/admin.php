@@ -124,7 +124,7 @@ require __DIR__ . '/../../templates/header.php';
 <? if ($current_user_is_admin): ?>
 <h3>game details</h3>
 <? if ($game['image'] !== null): ?>
-<img src="/game/<?= e($game_name) ?>/image" alt="" style="max-width:100px;max-height:100px;display:block;">
+<img src="/game/<?= e($game_name) ?>/image" alt="game logo" style="max-width:100px;max-height:100px;display:block;">
 <? endif; ?>
 <form method="post" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="upload_game_image">
