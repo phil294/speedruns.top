@@ -1,8 +1,3 @@
-pragma journal_mode = wal;
-pragma synchronous = normal;
-pragma foreign_keys = on;
-pragma temp_store = memory;
-
 create table user (
 	name text not null primary key check (length(name) <= 32 and length(name) >= 3),
 	email text null unique check (length(email) <= 254 and length(email) >= 6),
@@ -130,3 +125,9 @@ when (select count(*) from property where game_name = new.game_name and category
 begin
 	select raise(abort, 'a game may not have more than 10 categories');
 end;
+
+----------------------
+
+create table if not exists migration_version (
+	max_version text primary key
+);
