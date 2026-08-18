@@ -48,8 +48,7 @@ if (preg_match('#^/([^/]+)/([^/]+)(/([^/]+))?$#', $request_path, $match)) {
 // die($request_path);
 $pages_directory = realpath(__DIR__ . '/pages');
 $page_path = realpath(__DIR__ . "/pages{$request_path}.php");
-if ($page_path !== false && str_starts_with($page_path, $pages_directory . DIRECTORY_SEPARATOR)) { // avoid `..` attacks
+if ($page_path !== false && str_starts_with($page_path, $pages_directory . DIRECTORY_SEPARATOR)) // avoid `..` attacks
 	require $page_path;
-} else {
+else
 	render_page_not_found();
-}

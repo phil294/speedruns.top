@@ -4,9 +4,8 @@ declare(strict_types=1);
 function send_mail(string $to_address, string $subject, string $body): void {
 	if (DEBUG_PRINT_MAILS)
 		echo "MAIL DEBUG TO: $to_address<br>$subject<br><br>$body";
-	else {
+	else
 		mail($to_address, $subject, $body, "From: speedruns.top <admin@speedruns.top>\r\n");
-	}
 }
 
 function notify_site_admin(string $subject, string $body): void {

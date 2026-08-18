@@ -21,9 +21,8 @@ function log_exception(Throwable $e): never {
 		echo get_class($e) . "\n{$e->getMessage()}\nFile: {$e->getFile()}\nLine: {$e->getLine()}\n\n";
 		echo $e->getTraceAsString();
 		// var_dump($e);
-	} else {
+	} else
 		echo 'internal server error :( admins have been notified. please try again later.';
-	}
 	exit;
 }
 function check_for_fatal(): void {

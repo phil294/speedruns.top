@@ -10,9 +10,8 @@ function render_as_hidden_inputs(array $data, string $name_prefix = ''): void {
 		$name = $name_prefix === '' ? (string) $key : "{$name_prefix}[{$key}]";
 		if (is_array($value))
 			render_as_hidden_inputs($value, $name);
-		else {
+		else
 			echo '<input type="hidden" name="' . e($name) . '" value="' . e($value) . '">';
-		}
 	}
 }
 

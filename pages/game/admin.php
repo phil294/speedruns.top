@@ -50,9 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$role = (string) ($_POST['role'] ?? '');
 		if ($role === 'admin')
 			sql('insert into game_admin (game_name, user_name) values (?, ?)', [$game_name, $user_name]);
-		else {
+		else
 			sql('insert into game_moderator (game_name, user_name) values (?, ?)', [$game_name, $user_name]);
-		}
 	} elseif ($action === 'remove_moderator') {
 		require_game_admin();
 		sql('delete from game_moderator where game_name = ? and user_name = ?', [$game_name, (string) ($_POST['user_name'] ?? '')]);
