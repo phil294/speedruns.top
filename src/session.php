@@ -16,19 +16,15 @@ function current_user(): array|null {
 		"select u.name, u.email, u.discord_user_id not null as is_discord, u.profile_picture, u.username_changed_at not null as username_already_changed, u.is_site_admin, u.created_at,
 			max(0, ? - (strftime('%s', 'now') - coalesce(strftime('%s', u.last_action_at), 0))) as seconds_until_next_action
 		from login_session s join user u on u.name = s.user_name where s.token = ?",
-		[MIN_SECONDS_BETWEEN_ACTIONS, $token],
-	);
-	return $user;
-}
+		[MIN_SECONDS_BETWEEN_ACTIONS, $token],);
+	return $user;}
 
 function require_login(): array {
 	$user = current_user();
 	if ($user === null) {
 		header('Location: /login');
-		exit;
-	}
-	return $user;
-}
+		exit;}
+	return $user;}
 
 function log_in_as(string $user_name): void {
 	$token = bin2hex(random_bytes(32));
@@ -39,32 +35,26 @@ function log_in_as(string $user_name): void {
 		'secure' => COOKIE_SECURE,
 		'httponly' => true,
 		'samesite' => 'Lax', // can't use strict bc discord
-	]);
-}
+	]);}
 
 function log_out(): void {
 	$token = $_COOKIE['session'] ?? null;
 	if ($token !== null)
 		sql('delete from login_session where token = ?', [$token]);
-	setcookie('session', '', ['expires' => time() - 3600, 'path' => '/']);
-}
+	setcookie('session', '', ['expires' => time() - 3600, 'path' => '/']);}
 
 function is_game_admin(string $game_name, string $user_name): bool {
 	return sql_one('select 1 from game_admin where game_name = ? and user_name = ?',
-		[$game_name, $user_name]) !== null;
-}
+		[$game_name, $user_name]) !== null;}
 
 function is_game_moderator(string $game_name, string $user_name): bool {
 	return sql_one('select 1 from game_moderator where game_name = ? and user_name = ?',
-		[$game_name, $user_name]) !== null;
-}
+		[$game_name, $user_name]) !== null;}
 
 function require_game_admin_or_moderator(string $game_name): array {
 	$user = require_login();
 	if (!$user['is_site_admin'] && !is_game_admin($game_name, $user['name']) && !is_game_moderator($game_name, $user['name'])) {
 		http_response_code(403);
 		echo 'you are not an admin or moderator for this game.';
-		exit;
-	}
-	return $user;
-}
+		exit;}
+	return $user;}

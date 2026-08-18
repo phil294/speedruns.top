@@ -20,5 +20,4 @@ function scale_image_to_max_dimension(string $binary_image_data, int $max_dimens
 	imagesavealpha($scaled_image, true);
 	ob_start();
 	imagepng($scaled_image);
-	return (string) ob_get_clean();
-}
+	return (string) ob_get_clean();}

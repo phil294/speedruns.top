@@ -5,24 +5,21 @@ $game_name = $path_resource_id;
 $game = sql_one('select 1 from game where name = ?', [$game_name]);
 if ($game === null) {
 	render_page_not_found();
-	exit;
-}
+	exit;}
 
 $current_user = require_login();
 
 $category_names = array_column(sql('select name from category where game_name = ?', [$game_name]), 'name');
 if ($category_names === []) {
 	http_response_code(400);
-	$error_message = 'this game has no categories to submit runs to yet.';
-}
+	$error_message = 'this game has no categories to submit runs to yet.';}
 $selected_category_name = in_array($_POST['category'] ?? '', $category_names, true)
 	? $_POST['category']
 	: ($_GET['category'] ?? $category_names[0]['name'] ?? null);
 
 $properties = sql(
 	'select name from property where game_name = ? and category_name = ? order by name',
-	[$game_name, $selected_category_name],
-);
+	[$game_name, $selected_category_name],);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submit_run') {
 	$hours = (int) ($_POST['hours'] ?? 0);
@@ -35,29 +32,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'submi
 
 	$property_values = [];
 	foreach ($properties as $property) {
-		$property_values[$property['name']] = trim((string) ($_POST['property'][$property['name']] ?? ''));
-	}
+		$property_values[$property['name']] = trim((string) ($_POST['property'][$property['name']] ?? ''));}
 
 	transaction(function () use ($current_user, $game_name, $selected_category_name, $time_milliseconds, $proof, $comment, $property_values) {
 		sql(
 			'insert into run (user_name, proof, game_name, category_name, time_milliseconds, comment) values (?, ?, ?, ?, ?, ?)',
-			[$current_user['name'], $proof, $game_name, $selected_category_name, $time_milliseconds, $comment],
-		);
+			[$current_user['name'], $proof, $game_name, $selected_category_name, $time_milliseconds, $comment],);
 		foreach ($property_values as $property_name => $property_value) {
 			sql(
 				'insert into run__property (run_user_name, run_proof, game_name, category_name, property_name, value) values (?, ?, ?, ?, ?, ?)',
 				[$current_user['name'], $proof, $game_name, $selected_category_name, $property_name, $property_value],
-			);
-		}
+			);}
 	});
 	notify_game_admins_and_moderators(
 		$game_name,
 		'new run submitted for ' . $game_name,
-		"{$current_user['name']} submitted a run in $selected_category_name: " . format_run_time($time_milliseconds) . "\nproof: $proof\nplease review and verify it: " . BASE_URL . '/game/' . urlencode($game_name) . '/admin',
-	);
+		"{$current_user['name']} submitted a run in $selected_category_name: " . format_run_time($time_milliseconds) . "\nproof: $proof\nplease review and verify it: " . BASE_URL . '/game/' . urlencode($game_name) . '/admin',);
 	header("Location: /game/$game_name?category=" . urlencode($selected_category_name) . '&submitted=1');
-	exit;
-}
+	exit;}
 
 require __DIR__ . '/../../templates/header.php';
 ?>

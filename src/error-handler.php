@@ -10,8 +10,7 @@ function log_error(int $errno, string $errstr, string $errfile, int $errline) {
     if (!(error_reporting() & $errno)) {
         return false; // @-suppressed errors
     }
-	log_exception(new ErrorException($errstr, 0, $errno, $errfile, $errline));
-}
+	log_exception(new ErrorException($errstr, 0, $errno, $errfile, $errline));}
 function log_exception(Throwable $e): never {
 	$message = "Type: " . get_class($e) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()}";
 	log_line('error', "ex: {$message}");
@@ -23,13 +22,11 @@ function log_exception(Throwable $e): never {
 		// var_dump($e);
 	} else
 		echo 'internal server error :( admins have been notified. please try again later.';
-	exit;
-}
+	exit;}
 function check_for_fatal(): void {
 	$error = error_get_last();
 	if (($error["type"] ?? null) == E_ERROR)
-		log_error($error["type"], $error["message"], $error["file"], $error["line"]);
-}
+		log_error($error["type"], $error["message"], $error["file"], $error["line"]);}
 
 register_shutdown_function(check_for_fatal(...));
 set_error_handler(log_error(...));

@@ -19,12 +19,10 @@ function database(): PDO {
 	if (!$database_already_exists)
 		$connection->exec((string) file_get_contents(__DIR__ . '/../schema.sql'));
 
-	return $connection;
-}
+	return $connection;}
 
 function log_query(string $query, float $start_time): void {
-	log_line('debug', sprintf("query: [%.4f s] %s", microtime(true) - $start_time, preg_replace('/\s+/', ' ', trim($query))));
-}
+	log_line('debug', sprintf("query: [%.4f s] %s", microtime(true) - $start_time, preg_replace('/\s+/', ' ', trim($query))));}
 
 function sql(string $query, array $parameters = []): array|null {
 	$start_time = microtime(true);
@@ -32,13 +30,11 @@ function sql(string $query, array $parameters = []): array|null {
 	$statement->execute($parameters);
 	$rows = $statement->columnCount() > 0 ? $statement->fetchAll() : null;
 	log_query($query, $start_time);
-	return $rows;
-}
+	return $rows;}
 
 function sql_one(string $query, array $parameters = []): array|null {
 	$rows = sql($query, $parameters);
-	return $rows[0] ?? null;
-}
+	return $rows[0] ?? null;}
 
 function transaction(callable $callback): void {
 	$connection = database();
@@ -48,17 +44,13 @@ function transaction(callable $callback): void {
 		$connection->commit();
 	} catch (Throwable $e) {
 		$connection->rollBack();
-		throw $e;
-	}
-}
+		throw $e;}}
 
 function write_blob(string $query, string $binary_value, array $other_parameters = []): void {
 	$start_time = microtime(true);
 	$statement = database()->prepare($query);
 	$statement->bindValue(1, $binary_value, PDO::PARAM_LOB);
 	foreach ($other_parameters as $index => $value) {
-		$statement->bindValue($index + 2, $value);
-	}
+		$statement->bindValue($index + 2, $value);}
 	$statement->execute();
-	log_query($query, $start_time);
-}
+	log_query($query, $start_time);}

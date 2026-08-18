@@ -7,8 +7,7 @@ $games = sql(
 	left join category on category.game_name = game.name
 	left join run on run.game_name = game.name and run.deleted_at is null and (run.verified = 1 or run.verified is null)
 	group by game.name
-	order by game.name"
-);
+	order by game.name");
 require __DIR__ . '/../templates/header.php';
 ?>
 <a href="/game-add" class="prominent-link" style="float:right;">+ add a game</a></h3>

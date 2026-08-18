@@ -5,8 +5,7 @@ $user_name = $path_resource_id;
 $user = sql_one('select profile_picture, created_at from user where name = ?', [$user_name]);
 if ($user === null) {
 	render_page_not_found();
-	exit;
-}
+	exit;}
 
 $submissions = sql(
 	'select r.verified, r.time_milliseconds, r.created_at, r.category_name, r.proof, g.name as game_name, json_group_array(rp.value order by p.name asc) as property_values
@@ -17,8 +16,7 @@ $submissions = sql(
 	where r.user_name = ? and r.deleted_at is null
 	group by r.proof
 	order by r.created_at desc',
-	[$user_name],
-);
+	[$user_name],);
 
 require __DIR__ . '/../../templates/header.php';
 ?>

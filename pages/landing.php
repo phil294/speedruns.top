@@ -7,8 +7,7 @@ $recent_runs = sql(
 	join game on game.name = run.game_name
 	where run.deleted_at is null and (run.verified is null or run.verified = 1)
 	order by run.created_at desc
-	limit 10",
-);
+	limit 10",);
 $game_count = sql_one('select count(*) as count from game')['count'] ?? 0;
 
 

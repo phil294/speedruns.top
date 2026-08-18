@@ -7,8 +7,7 @@ function discord_authorize_url(): string {
 		'redirect_uri' => DISCORD_REDIRECT_URI,
 		'response_type' => 'code',
 		'scope' => 'identify',
-	]);
-}
+	]);}
 
 function discord_fetch_user_for_code(string $authorization_code): array {
 	$token_response = discord_api_request('https://discord.com/api/oauth2/token', [
@@ -29,8 +28,7 @@ function discord_fetch_user_for_code(string $authorization_code): array {
 	$response_body = curl_exec($curl_handle);
 	// curl_close($curl_handle);
 
-	return json_decode((string) $response_body, true);
-}
+	return json_decode((string) $response_body, true);}
 
 function discord_api_request(string $url, array $post_fields): array {
 	$curl_handle = curl_init($url);
@@ -42,5 +40,4 @@ function discord_api_request(string $url, array $post_fields): array {
 	]);
 	$response_body = curl_exec($curl_handle);
 	// curl_close($curl_handle);
-	return json_decode((string) $response_body, true);
-}
+	return json_decode((string) $response_body, true);}

@@ -10,11 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	sql(
 		'insert into game_request (name, website, description, requested_by) values (?, ?, ?, ?)',
-		[$name, $website !== '' ? $website : null, $description, $current_user['name']],
-	);
+		[$name, $website !== '' ? $website : null, $description, $current_user['name']],);
 	notify_site_admin('new game request on speedruns.top', "{$current_user['name']} requested \"$name\".\n\n$description");
-	$confirmation_message = 'thanks, your request has been sent to the site admins.';
-}
+	$confirmation_message = 'thanks, your request has been sent to the site admins.';}
 
 require __DIR__ . '/../templates/header.php';
 

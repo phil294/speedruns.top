@@ -5,8 +5,7 @@ $current_user = require_login();
 if (!$current_user['is_site_admin']) {
 	http_response_code(403);
 	echo 'site admins only';
-	exit;
-}
+	exit;}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$action = (string) ($_POST['action'] ?? '');
@@ -18,8 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			// TODO: helper
 			http_response_code(400);
 			echo 'no such game request';
-			exit;
-		}
+			exit;}
 		transaction(function () use ($game_request) {
 			sql('insert into game (name, website) values (?, ?)', [$game_request['requested_game_name'], $game_request['request_website']]);
 			sql('insert into game_admin (game_name, user_name) values (?, ?)', [$game_request['requested_game_name'], $game_request['requester_user_name']]);
@@ -30,14 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if($game_request === null) {
 			http_response_code(400);
 			echo 'no such game request';
-			exit;
-		}
+			exit;}
 		sql('delete from game_request where name = ?', [$name]);
-		send_mail($game_request['requester_email'], 'your game request was rejected', "\"{$game_request['requested_game_name']}\" was rejected. if you think this was a mistake, please contact " . SITE_ADMIN_EMAIL . ".");
-	}
+		send_mail($game_request['requester_email'], 'your game request was rejected', "\"{$game_request['requested_game_name']}\" was rejected. if you think this was a mistake, please contact " . SITE_ADMIN_EMAIL . ".");}
 	header('Location: /site-admin');
-	exit;
-}
+	exit;}
 
 $game_requests = sql('select name, description, requested_by from game_request order by created_at');
 

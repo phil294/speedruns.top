@@ -8,13 +8,11 @@ function log_line(string $severity, string $message): void {
 	try {
 		$user_name = current_user()['name'] ?? '-';
 	} catch (Throwable) {
-		$user_name = '??';
-	}
+		$user_name = '??';}
 	$line = sprintf("[%s] %s %s[%s] %s\n", date('Y-m-d H:i:s'), strtoupper($severity), $_uniq_req_id, $user_name, $message);
 	fwrite($_log_out, $line);
 	if ($severity === 'error')
-		notify_site_admin('error on '.BASE_URL, $message);
-}
+		notify_site_admin('error on '.BASE_URL, $message);}
 require __DIR__ . '/src/error-handler.php';
 require __DIR__ . '/src/bootstrap.php';
 
@@ -43,8 +41,7 @@ if (preg_match('#^/([^/]+)/([^/]+)(/([^/]+))?$#', $request_path, $match)) {
 } elseif ($request_path === '/') {
 	$request_path = '/landing';
 } else {
-	$breadcrumbs = [["name" => ltrim($request_path, '/')]];
-}
+	$breadcrumbs = [["name" => ltrim($request_path, '/')]];}
 // die($request_path);
 $pages_directory = realpath(__DIR__ . '/pages');
 $page_path = realpath(__DIR__ . "/pages{$request_path}.php");

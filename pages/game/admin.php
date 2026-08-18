@@ -5,8 +5,7 @@ $game_name = $path_resource_id;
 $game = sql_one('select name, image, rules, details from game where name = ?', [$game_name]);
 if ($game === null) {
 	render_page_not_found();
-	exit;
-}
+	exit;}
 
 $current_user = require_game_admin_or_moderator($game_name);
 $current_user_is_admin = (bool) $current_user['is_site_admin'] || is_game_admin($game_name, $current_user['name']);
@@ -16,9 +15,7 @@ function require_game_admin(): void {
 	if (!$current_user_is_admin) {
 		http_response_code(403);
 		echo 'only game admins may do that.';
-		exit;
-	}
-}
+		exit;}}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$action = (string) ($_POST['action'] ?? '');
@@ -33,8 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		require_game_admin();
 		sql(
 			'update category set rules = ? where game_name = ? and name = ?',
-			[trim((string) ($_POST['rules'] ?? '')), $game_name, (string) ($_POST['name'] ?? '')],
-		);
+			[trim((string) ($_POST['rules'] ?? '')), $game_name, (string) ($_POST['name'] ?? '')],);
 	} elseif ($action === 'add_category_property') {
 		require_game_admin();
 		sql('insert into property (game_name, category_name, name) values (?, ?, ?)', [$game_name, (string) ($_POST['category_name'] ?? ''), trim((string) ($_POST['property_name'] ?? ''))]);
@@ -42,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		require_game_admin();
 		sql(
 			'delete from property where game_name = ? and category_name = ? and name = ?',
-			[$game_name, (string) ($_POST['category_name'] ?? ''), (string) ($_POST['property_name'] ?? '')],
-		);
+			[$game_name, (string) ($_POST['category_name'] ?? ''), (string) ($_POST['property_name'] ?? '')],);
 	} elseif ($action === 'add_admin_or_moderator') {
 		require_game_admin();
 		$user_name = (string) ($_POST['user_name'] ?? '');
@@ -60,49 +55,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if (!$current_user_is_admin && $run_user_name === $current_user['name']) {
 			http_response_code(403);
 			echo 'moderators may not verify their own runs.';
-			exit;
-		}
+			exit;}
 		sql(
 			'update run set verified = 1, verified_by = ? where user_name = ? and proof = ? and game_name = ?',
-			[$current_user['name'], $run_user_name, (string) ($_POST['run_proof'] ?? ''), $game_name],
-		);
+			[$current_user['name'], $run_user_name, (string) ($_POST['run_proof'] ?? ''), $game_name],);
 		send_mail(
 			(string) sql_one('select email from user where name = ?', [$run_user_name])['email'],
 			"your run for $game_name has been verified",
-			"your run for $game_name has been verified by {$current_user['name']}. congratulations! you can find it at " . BASE_URL . "/game/$game_name.",
-		);
+			"your run for $game_name has been verified by {$current_user['name']}. congratulations! you can find it at " . BASE_URL . "/game/$game_name.",);
 	} elseif ($action === 'reject_run') {
 		sql(
 			'update run set verified = 0 where user_name = ? and proof = ? and game_name = ?',
-			[(string) ($_POST['run_user_name'] ?? ''), (string) ($_POST['run_proof'] ?? ''), $game_name],
-		);
+			[(string) ($_POST['run_user_name'] ?? ''), (string) ($_POST['run_proof'] ?? ''), $game_name],);
 		send_mail(
 			(string) sql_one('select email from user where name = ?', [$_POST['run_user_name']])['email'],
 			"your run for $game_name has been rejected",
-			"your run for $game_name has been rejected by {$current_user['name']}. if you think this was a mistake, please contact the game admins or moderators.",
-		);
+			"your run for $game_name has been rejected by {$current_user['name']}. if you think this was a mistake, please contact the game admins or moderators.",);
 	} elseif ($action === 'restore_run') {
 		sql(
 			'update run set verified = null where user_name = ? and proof = ? and game_name = ?',
-			[(string) ($_POST['run_user_name'] ?? ''), (string) ($_POST['run_proof'] ?? ''), $game_name],
-		);
+			[(string) ($_POST['run_user_name'] ?? ''), (string) ($_POST['run_proof'] ?? ''), $game_name],);
 	} elseif ($action === 'save_game_details') {
 		require_game_admin();
 		sql(
 			'update game set details = ?, rules = ? where name = ?',
-			[trim((string) ($_POST['details'] ?? '')), trim((string) ($_POST['rules'] ?? '')), $game_name],
-		);
+			[trim((string) ($_POST['details'] ?? '')), trim((string) ($_POST['rules'] ?? '')), $game_name],);
 	} elseif ($action === 'upload_game_image') {
 		require_game_admin();
 		if (($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
 			$scaled_image = scale_image_to_max_dimension((string) file_get_contents($_FILES['image']['tmp_name']), 450);
-			write_blob('update game set image = ? where name = ?', $scaled_image, [$game_name]);
-		}
-	}
+			write_blob('update game set image = ? where name = ?', $scaled_image, [$game_name]);}}
 
 	header("Location: /game/$game_name/admin");
-	exit;
-}
+	exit;}
 
 $categories = sql('select c.name, c.rules, json_group_array(p.name) as properties from category c left join property p on c.name = p.category_name where c.game_name = ? group by c.name', [$game_name]);
 
@@ -111,12 +96,10 @@ $game_moderator_user_names = array_column(sql('select user_name from game_modera
 
 $pending_runs = sql(
 	'select user_name, category_name, time_milliseconds, proof, created_at from run where game_name = ? and verified is null and deleted_at is null order by created_at',
-	[$game_name],
-);
+	[$game_name],);
 $rejected_runs = sql(
 	'select user_name, category_name, time_milliseconds, proof from run where game_name = ? and verified = 0 order by created_at desc',
-	[$game_name],
-);
+	[$game_name],);
 
 require __DIR__ . '/../../templates/header.php';
 ?>

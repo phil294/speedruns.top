@@ -5,8 +5,7 @@ $game_name = $path_resource_id;
 $game = sql_one('select name, rules, details, image from game where name = ?', [$game_name]);
 if ($game === null) {
 	render_page_not_found();
-	exit;
-}
+	exit;}
 $categories = sql('select name, rules from category where game_name = ?', [$game_name]);
 $selected_category_name = $_GET['category'] ?? $categories[0]['name'] ?? null;
 $selected_category = $selected_category_name !== null ? array_filter($categories, fn($c) => $c['name'] === $selected_category_name)[0] ?? null : null;
@@ -33,8 +32,7 @@ if ($selected_category !== null) {
 		order by r.time_milliseconds asc",
 		[$game_name, $selected_category_name]);
 
-	$property_names = array_column(sql('select name from property where game_name = ? and category_name = ? order by name asc', [$game_name, $selected_category_name]), 'name');
-}
+	$property_names = array_column(sql('select name from property where game_name = ? and category_name = ? order by name asc', [$game_name, $selected_category_name]), 'name');}
 
 $game_admin_user_names = array_column(sql('select user_name from game_admin where game_name = ? order by user_name', [$game_name]), 'user_name');
 $game_moderator_user_names = array_column(sql('select user_name from game_moderator where game_name = ? order by user_name', [$game_name]), 'user_name');
