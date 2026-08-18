@@ -15,17 +15,20 @@ $game_count = sql_one('select count(*) as count from game')['count'] ?? 0;
 require __DIR__ . '/../templates/header.php';
 ?>
 
-<section id="about">
-	<p>speedruns.top is an alternative to the popular <a href="https://speedrun.com">speedrun.com</a> site. <? help_icon_html('speedrunning is the act of playing a video game, or section of a video game, with the goal of completing it as fast as possible. <cite><a href="https://en.wikipedia.org/wiki/Speedrunning">en.wikipedia.org</a></cite>') ?></p>
-	<p>we are <a href="https://github.com/phil294/speedruns.top">open source</a> and accept <em>all</em> sorts of games and categories.</p>
-	<p>anybody can request the addition of a new game, and you can submit runs to any game. game moderators will then review and approve them.</p>
-	<p>feel free to contact us any time via <a href="mailto:<?= SITE_ADMIN_EMAIL ?>"><?= SITE_ADMIN_EMAIL ?></a>.</p>
-</section>
+<div style="display: flex; align-items: center; gap: 2em;">
+	<img src="/logo.png" alt="logo">
+	<section id="about">
+		<p>speedruns.top is an alternative to the popular <a href="https://speedrun.com">speedrun.com</a> site. <? help_icon_html('speedrunning is the act of playing a video game, or section of a video game, with the goal of completing it as fast as possible. <cite><a href="https://en.wikipedia.org/wiki/Speedrunning">en.wikipedia.org</a></cite>') ?></p>
+		<p>we are <a href="https://github.com/phil294/speedruns.top">open source</a> and accept <em>all</em> sorts of games and categories.</p>
+		<p>anybody can request the addition of a new game, and you can submit runs to any game. game moderators will then review and approve them.</p>
+		<p>feel free to contact us any time via <a href="mailto:<?= SITE_ADMIN_EMAIL ?>"><?= SITE_ADMIN_EMAIL ?></a>.</p>
+	</section>
+</div>
 
 <hr>
 
 <h3>list of games</h3>
-<a href="/game">click here to list all <strong><?= $game_count ?></strong> games</a>
+<a href="/game">click here to list all <span style="font-weight: bold; font-size: xx-large;"><?= $game_count ?></span> games</a>
 
 
 <h3>recent runs</h3>

@@ -10,6 +10,7 @@ $theme_preference = $_COOKIE['theme'] ?? null;
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?= $title ? (e($title) . ' - ') : 'speedruns.top' ?></title>
 	<link rel="stylesheet" href="/style.css">
+	<link rel="icon" type="image/png" href="/logo.png"/>
 </head>
 <body>
 	<header>

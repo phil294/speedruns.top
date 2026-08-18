@@ -2,6 +2,7 @@ RewriteEngine On
 
 RewriteCond %{REQUEST_URI} !^/index\.php$
 RewriteCond %{REQUEST_URI} !^/style\.css$
+RewriteCond %{REQUEST_URI} !^/logo\.png$
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [F]
 
