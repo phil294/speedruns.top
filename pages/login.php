@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 	rate_limit_login_attempts_by_ip();
 	$email = trim((string) ($_POST['email'] ?? ''));
-	if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+	if (filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		$error_message = 'invalid email??';
-	} else {
+	else {
 		$existing_user = sql_one(
 			"select name,
 				max(0, ? - (strftime('%s', 'now') - coalesce(strftime('%s', u.last_login_link_sent_at), 0))) as seconds_until_next_login_link

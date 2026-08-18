@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$error_message = $exception->getMessage();
 		}
 	} elseif ($action === 'upload_profile_picture') {
-		if (($_FILES['picture']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+		if (($_FILES['picture']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK)
 			$error_message = 'that image could not be uploaded, it may be too large.';
-		} else {
+		else {
 			$scaled_image = scale_image_to_max_dimension((string) file_get_contents($_FILES['picture']['tmp_name']), 200);
 			write_blob('update user set profile_picture = ? where name = ?', $scaled_image, [$current_user['name']]);
 			header('Location: /account');
